@@ -1,7 +1,7 @@
 import XCTest
 
-import MultipartFormDataTestUtilTests
+import MultipartFormDataSwiftKitTests
 
 var tests = [XCTestCaseEntry]()
-tests += MultipartFormDataTestUtilTests.allTests()
+tests += MultipartFormDataSwiftKitTests.allTests()
 XCTMain(tests)
