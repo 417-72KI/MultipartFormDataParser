@@ -11,7 +11,7 @@ typealias Image = UIImage
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-import MultipartFormDataSwiftKit
+import MultipartFormDataParser
 
 var uploadTestStubResponse: OHHTTPStubsResponseBlock = { request in
     let errorResponse = { (message: String) -> OHHTTPStubsResponse in

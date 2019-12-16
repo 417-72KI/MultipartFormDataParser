@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: macOS
-        run: set -o pipefail && xcrun xcodebuild test -scheme MultipartFormDataSwiftKit -destination "platform=macOS" clean test | xcpretty
+        run: set -o pipefail && xcrun xcodebuild test -scheme MultipartFormDataParser -destination "platform=macOS" clean test | xcpretty
   iOS:
     name: Test on iOS
     runs-on: macOS-latest
@@ -41,7 +41,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1            
       - name: iOS - ${{ matrix.destination }}
-        run: set -o pipefail && xcrun xcodebuild -scheme MultipartFormDataSwiftKit -destination "${{ matrix.destination }}" clean test | xcpretty
+        run: set -o pipefail && xcrun xcodebuild -scheme MultipartFormDataParser -destination "${{ matrix.destination }}" clean test | xcpretty
   tvOS:
     name: Test on tvOS 
     runs-on: macOS-latest
@@ -53,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1            
       - name: tvOS - ${{ matrix.destination }}
-        run: set -o pipefail && xcrun xcodebuild -scheme "MultipartFormDataSwiftKit" -destination "${{ matrix.destination }}" clean test | xcpretty
+        run: set -o pipefail && xcrun xcodebuild -scheme "MultipartFormDataParser" -destination "${{ matrix.destination }}" clean test | xcpretty
   # watchOS:
   #   name: Test on watchOS
   #   runs-on: macOS-latest
@@ -65,4 +65,4 @@ jobs:
   #   steps:
   #     - uses: actions/checkout@v1
   #     - name: watchOS - ${{ matrix.destination }}
-  #       run: set -o pipefail && xcrun xcodebuild -scheme "MultipartFormDataSwiftKit" -destination "${{ matrix.destination }}" clean build | xcpretty
+  #       run: set -o pipefail && xcrun xcodebuild -scheme "MultipartFormDataParser" -destination "${{ matrix.destination }}" clean build | xcpretty

@@ -3,11 +3,12 @@ import Alamofire
 import OHHTTPStubs
 import OHHTTPStubsSwift
 
-import MultipartFormDataSwiftKit
+import MultipartFormDataParser
 
-#if canImport(Cocoa)
-import Cocoa
-final class MultipartFormDataSwiftKit_CocoaTests: XCTestCase {
+#if canImport(UIKit)
+import UIKit
+
+final class MultipartFormDataParser_UIKitTests: XCTestCase {
 
     override class func setUp() {
         super.setUp()
@@ -22,8 +23,8 @@ final class MultipartFormDataSwiftKit_CocoaTests: XCTestCase {
     }
 
     func testAlamofire() throws {
-        let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)
-        let denwaNeko = try XCTUnwrap(NSImage(data: TestResource.denwaNeko)?.jpegRepresentation)
+        let genbaNeko = try XCTUnwrap(UIImage(data: TestResource.genbaNeko)?.jpegData(compressionQuality: 1))
+        let denwaNeko = try XCTUnwrap(UIImage(data: TestResource.denwaNeko)?.jpegData(compressionQuality: 1))
         let message = try XCTUnwrap("Hello world!".data(using: .utf8))
 
         let exp = expectation(description: "response")
@@ -43,23 +44,23 @@ final class MultipartFormDataSwiftKit_CocoaTests: XCTestCase {
                     mimeType: "image/jpeg"
                 )
                 formData.append(message, withName: "message")
-            },
+        },
             to: "https://localhost/upload"
-            ).responseJSON {
-                switch $0.result {
-                case let .success(data):
-                    do {
-                        let dic = try XCTUnwrap(data as? [String: Any])
-                        let status = try XCTUnwrap(dic["status"] as? Int)
-                        XCTAssertEqual(status, 200)
-                        XCTAssertNil(dic["error"])
-                    } catch {
-                        XCTFail(error.localizedDescription)
-                    }
-                case let .failure(error):
+        ).responseJSON {
+            switch $0.result {
+            case let .success(data):
+                do {
+                    let dic = try XCTUnwrap(data as? [String: Any])
+                    let status = try XCTUnwrap(dic["status"] as? Int)
+                    XCTAssertEqual(status, 200)
+                    XCTAssertNil(dic["error"])
+                } catch {
                     XCTFail(error.localizedDescription)
                 }
-                exp.fulfill()
+            case let .failure(error):
+                XCTFail(error.localizedDescription)
+            }
+            exp.fulfill()
         }
         wait(for: [exp], timeout: 10)
     }
