@@ -15,6 +15,8 @@ jobs:
     name: Test SPM Integration
     runs-on: macOS-latest
     needs: [macOS]
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     steps:
       - uses: actions/checkout@v1
       - name: SPM test
@@ -22,6 +24,8 @@ jobs:
   macOS:
     name: Test on macOS
     runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     steps:
       - uses: actions/checkout@v1
       - name: test
@@ -29,6 +33,8 @@ jobs:
   iOS:
     name: Test on iOS
     runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     strategy:
       matrix:
         destination: ["OS=13.1,name=iPhone 11 Pro"] #, "OS=12.4,name=iPhone XS", "OS=11.4,name=iPhone X", "OS=10.3.1,name=iPhone SE"]
@@ -39,6 +45,8 @@ jobs:
   tvOS:
     name: Test on tvOS 
     runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     strategy:
       matrix:
         destination: ["OS=13.0,name=Apple TV 4K"] #, "OS=11.4,name=Apple TV 4K", "OS=10.2,name=Apple TV 1080p"]
@@ -49,6 +57,8 @@ jobs:
   watchOS:
     name: Test on watchOS
     runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     strategy:
       matrix:
         destination: ["OS=6.0,name=Apple Watch Series 5 - 44mm"] #, "OS=4.2,name=Apple Watch Series 3 - 42mm", "OS=3.2,name=Apple Watch Series 2 - 42mm"]
