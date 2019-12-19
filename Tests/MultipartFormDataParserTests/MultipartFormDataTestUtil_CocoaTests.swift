@@ -1,8 +1,4 @@
 import XCTest
-import Alamofire
-import OHHTTPStubs
-import OHHTTPStubsSwift
-
 import MultipartFormDataParser
 
 #if canImport(Cocoa)
@@ -10,15 +6,11 @@ import Cocoa
 final class MultipartFormDataParser_CocoaTests: XCTestCase {
 
     override class func setUp() {
-        super.setUp()
-        let condition = isHost("localhost")
-            && isPath("/upload")
-        stub(condition: condition, response: uploadTestStubResponse)
+        stubForUpload()
     }
 
     override class func tearDown() {
-        HTTPStubs.removeAllStubs()
-        super.tearDown()
+        clearStubs()
     }
 
     func testAlamofire() throws {

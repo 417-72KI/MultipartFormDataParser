@@ -13,7 +13,17 @@ import OHHTTPStubsSwift
 
 import MultipartFormDataParser
 
-var uploadTestStubResponse: OHHTTPStubsResponseBlock = { request in
+func stubForUpload() {
+    let condition = isHost("localhost")
+        && isPath("/upload")
+    stub(condition: condition, response: uploadTestStubResponse)
+}
+
+func clearStubs() {
+    HTTPStubs.removeAllStubs()
+}
+
+private var uploadTestStubResponse: OHHTTPStubsResponseBlock = { request in
     let errorResponse = { (message: String) -> OHHTTPStubsResponse in
         .init(jsonObject: ["status": 403, "error": message], statusCode: 403, headers: ["Content-Type": "application/json"])
     }
