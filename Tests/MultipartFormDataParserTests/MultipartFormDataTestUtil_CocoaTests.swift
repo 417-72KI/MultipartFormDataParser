@@ -3,6 +3,7 @@ import MultipartFormDataParser
 
 #if canImport(Cocoa)
 import Cocoa
+
 final class MultipartFormDataParser_CocoaTests: XCTestCase {
 
     override class func setUp() {
