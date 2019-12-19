@@ -1,5 +1,4 @@
 import Alamofire
-import APIKit
 import Foundation
 import XCTest
 
@@ -34,15 +33,5 @@ extension XCTestCase {
         let response = try XCTUnwrap(request.response, file: file, line: line)
         XCTAssertEqual(response.statusCode, 200, file: file, line: line)
         return request.data
-    }
-
-    func uploadWithAPIKit(
-        genbaNeko: Data,
-        denwaNeko: Data,
-        message: Data,
-        file: StaticString = #file,
-        line: UInt = #line
-    ) throws -> Data? {
-        return nil
     }
 }
