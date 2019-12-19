@@ -9,7 +9,7 @@ extension XCTestCase {
         message: Data,
         file: StaticString = #file,
         line: UInt = #line
-    ) throws -> Data? {
+    ) throws -> TestEntity? {
         let exp = expectation(description: "response")
         let request = AF.upload(
             multipartFormData: { formData in
@@ -32,6 +32,10 @@ extension XCTestCase {
         wait(for: [exp], timeout: 10)
         let response = try XCTUnwrap(request.response, file: file, line: line)
         XCTAssertEqual(response.statusCode, 200, file: file, line: line)
-        return request.data
+        guard let data = request.data else { return nil }
+
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(TestEntity.self, from: data)
     }
 }
