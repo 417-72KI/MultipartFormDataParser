@@ -11,7 +11,13 @@ extension XCTestCase {
         line: UInt = #line
     ) throws -> TestEntity? {
         let exp = expectation(description: "response")
-        let request = TestRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let request = TestRequest(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            message: message,
+            file: file,
+            line: line
+        )
         var entity: TestEntity!
         Session.shared.send(request, callbackQueue: nil) { result in
             defer { exp.fulfill() }
@@ -35,6 +41,9 @@ private struct TestRequest: APIKit.Request {
     var denwaNeko: Data
     var message: Data
 
+    var file: StaticString
+    var line: UInt
+
     var bodyParameters: BodyParameters? {
         let parts: [MultipartFormDataBodyParameters.Part] = [
             .init(
@@ -55,6 +64,7 @@ private struct TestRequest: APIKit.Request {
     }
 
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
+        XCTAssertEqual(urlResponse.statusCode, 200, file: file, line: line)
         switch object {
         case let data as Data:
             let decoder = JSONDecoder()
