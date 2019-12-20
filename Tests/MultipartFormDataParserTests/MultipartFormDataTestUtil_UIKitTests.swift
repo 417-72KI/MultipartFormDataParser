@@ -33,5 +33,15 @@ final class MultipartFormDataParser_UIKitTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
+
+    func testMoya() throws {
+        let genbaNeko = try XCTUnwrap(UIImage(data: TestResource.genbaNeko)?.jpegData(compressionQuality: 1))
+        let denwaNeko = try XCTUnwrap(UIImage(data: TestResource.denwaNeko)?.jpegData(compressionQuality: 1))
+        let message = try XCTUnwrap("Hello world!".data(using: .utf8))
+
+        let result = try XCTUnwrap(uploadWithMoya(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message))
+        XCTAssertEqual(result.status, 200)
+        XCTAssertNil(result.error)
+    }
 }
 #endif
