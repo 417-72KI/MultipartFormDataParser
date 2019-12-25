@@ -1,3 +1,4 @@
+swiftlint.lint_all_files = true # Remove later
 swiftlint.lint_files inline_mode: true
 
 # Make it more obvious that a PR is a work in progress and shouldn't be merged yet
