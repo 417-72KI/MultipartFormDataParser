@@ -18,15 +18,8 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
-      - name: Cache ~/.danger-swift
-        uses: actions/cache@v1
-        with:
-          path: ~/.danger-swift
-          key: ${{ runner.os }}-MultipartFormDataParser
-          restore-keys:
-            ${{ runner.os }}-MultipartFormDataParser
       - name: Danger
-        uses: danger/swift@2.0.1
+        uses: danger/swift@2.0.3
   macOS:
     name: Test on macOS
     runs-on: macOS-latest
