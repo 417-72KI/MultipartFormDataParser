@@ -39,17 +39,20 @@ extension MultipartFormData.Element {
                 element.data = line
                 continue
             }
-            if let contentDispositionMatches = try! NSRegularExpression(pattern: #"Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?"#, options: [])
-                .firstMatch(in: string, options: [], range: .init(location: 0, length: string.count)) {
-                element.name = (string as NSString).substring(with: contentDispositionMatches.range(withName: "name"))
-                let filenameRange = contentDispositionMatches.range(withName: "filename")
-                if filenameRange.length != 0 {
-                    element.fileName = (string as NSString).substring(with: filenameRange)
+            if let contentDispositionMatches = RegularExpression(pattern: #"Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?"#)
+                .firstMatch(in: string) {
+                if let name = contentDispositionMatches.grouped(withName: "name") {
+                    element.name = name
+                }
+                if let filename = contentDispositionMatches.grouped(withName: "filename") {
+                    element.fileName = filename
                 }
                 continue
             }
-            if let contentTypeMatches = try! NSRegularExpression(pattern: #"Content-Type: (?<mimetype>.*/.*)"#, options: []).firstMatch(in: string, options: [], range: .init(location: 0, length: string.count)) {
-                element.mimeType = (string as NSString).substring(with: contentTypeMatches.range(withName: "mimetype"))
+            if let mimeType = RegularExpression(pattern: #"Content-Type: (?<mimetype>.*/.*)"#)
+                .firstMatch(in: string)
+                .flatMap({ $0.grouped(withName: "mimetype") }) {
+                element.mimeType = mimeType
                 continue
             }
             print(string)
