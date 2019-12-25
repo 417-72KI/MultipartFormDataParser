@@ -14,13 +14,13 @@ jobs:
   danger:
     name: Danger
     runs-on: macOS-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - name: Install
         run: bundle install
       - name: Run Danger
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: danger
   macOS:
     name: Test on macOS
