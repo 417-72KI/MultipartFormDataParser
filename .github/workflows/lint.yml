@@ -1,0 +1,15 @@
+name: SwiftLint
+
+on:
+  pull_request:
+    paths:
+      - '.swiftlint.yml'
+      - 'Sources/**/*.swift'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: SwiftLint
+        uses: norio-nomura/action-swiftlint@3.0.1
