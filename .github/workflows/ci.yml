@@ -11,6 +11,15 @@ on:
       - hotfix
 
 jobs:
+  danger:
+    name: Danger
+    runs-on: macOS-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v1
+      - name: Danger
+        uses: danger/swift@2.0.3
   macOS:
     name: Test on macOS
     runs-on: macOS-latest
