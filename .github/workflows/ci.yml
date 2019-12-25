@@ -26,7 +26,7 @@ jobs:
           restore-keys:
             ${{ runner.os }}-MultipartFormDataParser
       - name: Danger
-        uses: danger/swift@2.0.3
+        uses: danger/swift@2.0.1
   macOS:
     name: Test on macOS
     runs-on: macOS-latest
