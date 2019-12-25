@@ -13,13 +13,15 @@ on:
 jobs:
   danger:
     name: Danger
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
-      - name: Danger
-        uses: danger/swift@2.0.3
+      - name: Install
+        run: bundle install
+      - name: Run Danger
+        run: danger
   macOS:
     name: Test on macOS
     runs-on: macOS-latest
