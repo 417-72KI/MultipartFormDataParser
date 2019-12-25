@@ -10,16 +10,16 @@ on:
       - hotfix
 jobs:
   macOS:
-    name: on macOS
+    name: macOS
     runs-on: macOS-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
     steps:
       - uses: actions/checkout@v1
-      - name: macOS
+      - name: test
         run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "platform=macOS" clean test | xcpretty
   iOS:
-    name: on iOS
+    name: iOS
     runs-on: macOS-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
@@ -28,10 +28,10 @@ jobs:
         destination: ["OS=13.2,name=iPhone 11 Pro"]
     steps:
       - uses: actions/checkout@v1            
-      - name: iOS - ${{ matrix.destination }}
+      - name: test
         run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "${{ matrix.destination }}" clean test | xcpretty
   tvOS:
-    name: on tvOS 
+    name: tvOS 
     runs-on: macOS-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
@@ -40,10 +40,10 @@ jobs:
         destination: ["OS=13.2,name=Apple TV 4K"]
     steps:
       - uses: actions/checkout@v1            
-      - name: tvOS - ${{ matrix.destination }}
+      - name: test
         run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme "MultipartFormDataParser" -destination "${{ matrix.destination }}" clean test | xcpretty
   # watchOS:
-  #   name: on watchOS
+  #   name: watchOS
   #   runs-on: macOS-latest
   #   env:
   #     DEVELOPER_DIR: /Applications/Xcode_11.2.app/Contents/Developer
