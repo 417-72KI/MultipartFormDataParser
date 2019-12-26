@@ -1,7 +1,8 @@
 # MultipartFormDataParser
-[![Actions Status](https://github.com/417-72KI/MultipartFormDataParser/workflows/CI-test/badge.svg)](https://github.com/417-72KI/MultipartFormDataParser/actions)
+[![Actions Status](https://github.com/417-72KI/MultipartFormDataParser/workflows/Test/badge.svg)](https://github.com/417-72KI/MultipartFormDataParser/actions)<!-- CocoaPods future support
 [![Version](http://img.shields.io/cocoapods/v/MultipartFormDataParser.svg?style=flat)](http://cocoapods.org/pods/MultipartFormDataParser)
 [![Platform](http://img.shields.io/cocoapods/p/MultipartFormDataParser.svg?style=flat)](http://cocoapods.org/pods/MultipartFormDataParser)
+-->
 [![GitHub release](https://img.shields.io/github/release/417-72KI/MultipartFormDataParser/all.svg)](https://github.com/417-72KI/MultipartFormDataParser/releases)
 [![Swift Package Manager](https://img.shields.io/badge/Swift%20Package%20Manager-4.2.0-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
