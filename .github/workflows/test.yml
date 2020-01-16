@@ -19,7 +19,7 @@ jobs:
         destination: 
           - platform=macOS
           - platform=iOS Simulator,name=iPhone 11 Pro,OS=13.2
-          - platform=iOS Simulator,name=Apple TV 4K,OS=13.2
+          - platform=tvOS Simulator,name=Apple TV 4K,OS=13.2
     steps:
       - uses: actions/checkout@v1
       - name: test
