@@ -23,21 +23,21 @@ jobs:
     runs-on: macOS-latest
     strategy:
       matrix:
-        destination: ["OS=13.2,name=iPhone 11 Pro"]
+        destination: ["iPhone 11 Pro"]
     steps:
       - uses: actions/checkout@v1            
       - name: test
-        run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "${{ matrix.destination }}" clean test | xcpretty
+        run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "name=${{ matrix.destination }}" clean test | xcpretty
   tvOS:
     name: tvOS 
     runs-on: macOS-latest
     strategy:
       matrix:
-        destination: ["OS=13.2,name=Apple TV 4K"]
+        destination: ["Apple TV 4K"]
     steps:
       - uses: actions/checkout@v1            
       - name: test
-        run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme "MultipartFormDataParser" -destination "${{ matrix.destination }}" clean test | xcpretty
+        run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme "MultipartFormDataParser" -destination "name=${{ matrix.destination }}" clean test | xcpretty
   # watchOS:
   #   name: watchOS
   #   runs-on: macOS-latest
