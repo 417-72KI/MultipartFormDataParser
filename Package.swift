@@ -19,10 +19,10 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.0.0-rc.3")),
-        .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .branch("feature/spm-support")),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.0.0")),
+        .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
         .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
-        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "14.0.0-beta.6"))
+        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "14.0.0"))
         ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
