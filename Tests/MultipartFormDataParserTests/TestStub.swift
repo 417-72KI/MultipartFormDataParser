@@ -23,8 +23,8 @@ func clearStubs() {
     HTTPStubs.removeAllStubs()
 }
 
-private var uploadTestStubResponse: OHHTTPStubsResponseBlock = { request in
-    let errorResponse = { (message: String) -> OHHTTPStubsResponse in
+private var uploadTestStubResponse: HTTPStubsResponseBlock = { request in
+    let errorResponse = { (message: String) -> HTTPStubsResponse in
         .init(jsonObject: ["status": 403, "error": message], statusCode: 403, headers: ["Content-Type": "application/json"])
     }
     do {
