@@ -1,18 +1,17 @@
 name: Danger
 on:
   pull_request:
+    types: [opened, synchronize, edited]
     branches: 
       - master
       - hotfix
 jobs:
   danger:
     name: Danger
-    runs-on: macOS-latest
+    runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
-      - name: Install
-        run: bundle install
-      - name: Run Danger
+      - uses: actions/checkout@v2
+      - name: Danger
+        uses: 417-72KI/danger-swiftlint@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: danger
