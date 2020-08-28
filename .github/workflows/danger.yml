@@ -1,6 +1,7 @@
 name: Danger
 on:
   pull_request:
+    types: [opened, synchronize, edited]
     branches: 
       - master
       - hotfix
