@@ -22,9 +22,9 @@ private extension MultipartFormDataParser {
         var data = Data()
         while stream.hasBytesAvailable {
             var buffer = [UInt8](repeating: 0, count: 512)
-            let count = stream.read(&buffer, maxLength: buffer.count)
-            guard count > 0 else { break }
-            data.append(buffer, count: count)
+            let readCount = stream.read(&buffer, maxLength: buffer.count)
+            guard readCount > 0 else { break }
+            data.append(buffer, count: readCount)
         }
         return data
     }
@@ -64,4 +64,3 @@ extension MultipartFormDataParser {
         return try Self(boundary: boundary).parse(stream)
     }
 }
-
