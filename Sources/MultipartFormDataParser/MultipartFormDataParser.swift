@@ -22,18 +22,16 @@ private extension MultipartFormDataParser {
         var data = Data()
         while stream.hasBytesAvailable {
             var buffer = [UInt8](repeating: 0, count: 512)
-            let count = stream.read(&buffer, maxLength: buffer.count)
-            if count <= 0 {
-                break
-            }
-            data.append(buffer, count: count)
+            let readCount = stream.read(&buffer, maxLength: buffer.count)
+            guard readCount > 0 else { break }
+            data.append(buffer, count: readCount)
         }
         return data
     }
 
     func split(_ data: [Data], withBoundary boundary: String) throws -> [[Data]] {
         var result = [[Data]]()
-        for d in data {
+        for d in data { // swiftlint:disable:this identifier_name
             switch String(data: d, encoding: .utf8) {
             case "--\(boundary)--"?:
                 return result
@@ -66,4 +64,3 @@ extension MultipartFormDataParser {
         return try Self(boundary: boundary).parse(stream)
     }
 }
-

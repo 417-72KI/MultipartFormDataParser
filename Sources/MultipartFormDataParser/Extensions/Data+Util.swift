@@ -9,7 +9,7 @@ extension Data {
         let bytes = self.bytes
         var result = [Data]()
         var position = 0
-        for i in 0..<count - 1 {
+        for i in 0..<count - 1 { // swiftlint:disable:this identifier_name
             let current = Array(bytes[i..<(i + separator.count)])
             if current == separator {
                 if i > 0 {
