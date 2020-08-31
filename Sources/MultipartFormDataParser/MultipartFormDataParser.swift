@@ -23,9 +23,7 @@ private extension MultipartFormDataParser {
         while stream.hasBytesAvailable {
             var buffer = [UInt8](repeating: 0, count: 512)
             let count = stream.read(&buffer, maxLength: buffer.count)
-            if count <= 0 {
-                break
-            }
+            guard count > 0 else { break }
             data.append(buffer, count: count)
         }
         return data
