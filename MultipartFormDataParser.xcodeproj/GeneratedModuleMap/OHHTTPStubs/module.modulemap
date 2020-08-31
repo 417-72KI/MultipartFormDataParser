@@ -1,4 +1,4 @@
 module OHHTTPStubs {
-    umbrella "/Users/417_72ki/.ghq/github.com/417-72KI/MultipartFormDataParser/.build/checkouts/OHHTTPStubs/Sources/OHHTTPStubs/include"
+    umbrella "/Users/tmuta/.ghq/github.com/417-72KI/MultipartFormDataParser/.build/checkouts/OHHTTPStubs/Sources/OHHTTPStubs/include"
     export *
 }
