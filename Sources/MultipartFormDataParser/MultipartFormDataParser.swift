@@ -31,7 +31,7 @@ private extension MultipartFormDataParser {
 
     func split(_ data: [Data], withBoundary boundary: String) throws -> [[Data]] {
         var result = [[Data]]()
-        for d in data {
+        for d in data { // swiftlint:disable:this identifier_name
             switch String(data: d, encoding: .utf8) {
             case "--\(boundary)--"?:
                 return result
