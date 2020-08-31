@@ -15,7 +15,7 @@ jobs:
     name: macOS
     runs-on: macOS-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: test
         run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "platform=macOS" clean test | xcpretty
   iOS:
@@ -25,7 +25,7 @@ jobs:
       matrix:
         destination: ["iPhone 11 Pro"]
     steps:
-      - uses: actions/checkout@v1            
+      - uses: actions/checkout@v2
       - name: test
         run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "name=${{ matrix.destination }}" clean test | xcpretty
   tvOS:
@@ -35,7 +35,7 @@ jobs:
       matrix:
         destination: ["Apple TV 4K"]
     steps:
-      - uses: actions/checkout@v1            
+      - uses: actions/checkout@v2
       - name: test
         run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme "MultipartFormDataParser" -destination "name=${{ matrix.destination }}" clean test | xcpretty
   # watchOS:
@@ -45,6 +45,6 @@ jobs:
   #     matrix:
   #       destination: ["OS=6.1,name=Apple Watch Series 5 - 44mm"]
   #   steps:
-  #     - uses: actions/checkout@v1
+  #     - uses: actions/checkout@v2
   #     - name: watchOS - ${{ matrix.destination }}
   #       run: set -o pipefail && rm -rf 'MultipartFormDataParser.xcodeproj' && xcrun xcodebuild -enableCodeCoverage YES -scheme "MultipartFormDataParser" -destination "${{ matrix.destination }}" clean build | xcpretty
