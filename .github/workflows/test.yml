@@ -18,7 +18,8 @@ jobs:
         destination: 
           - "platform=macOS"
           - "platform=iOS Simulator,name=iPhone 11 Pro"
-          - "platform=iOS Simulator,name=Apple TV 4K"
+          - "platform=tvOS Simulator,name=Apple TV 4K"
+          - "platform=watchOS Simulator,name=Apple Watch Series 5 - 44mm"
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
