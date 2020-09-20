@@ -17,8 +17,8 @@ jobs:
         xcode: [11.6, 12]
         destination: 
           - "platform=macOS"
-          - "platform=iOS Simulator, name=iPhone 11 Pro"
-          - "platform=iOS Simulator, name=Apple TV 4K"
+          - "platform=iOS Simulator,name=iPhone 11 Pro"
+          - "platform=iOS Simulator,name=Apple TV 4K"
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
