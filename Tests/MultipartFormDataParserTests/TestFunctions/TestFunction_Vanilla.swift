@@ -28,6 +28,33 @@ extension XCTestCase {
         wait(for: [exp], timeout: 10)
         return entity
     }
+
+    func uploadURLSessionDataTask(
+        genbaNeko: Data,
+        denwaNeko: Data,
+        message: Data,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) throws -> TestEntity? {
+        let exp = expectation(description: "response")
+
+        let boundary = "YoWatanabe0417"
+        var request = URLRequest(url: URL(string: "https://localhost/upload")!)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = createBody(boundary: boundary,
+                              genbaNeko: genbaNeko,
+                              denwaNeko: denwaNeko,
+                              message: message)
+        var entity: TestEntity!
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            defer { exp.fulfill() }
+            entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
+        }.resume()
+
+        wait(for: [exp], timeout: 10)
+        return entity
+    }
 }
 
 private func createBody(boundary: String,
