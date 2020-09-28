@@ -2,7 +2,7 @@ import Danger
 
 let danger = Danger()
 
-SwiftLint.lint(inline: true)
+SwiftLint.lint(.modifiedAndCreatedFiles(directory: "Sources"), inline: true)
 
 let git = danger.git
 
