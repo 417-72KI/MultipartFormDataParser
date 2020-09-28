@@ -1,7 +1,7 @@
 import XCTest
 import MultipartFormDataParser
 
-#if canImport(Cocoa)
+#if canImport(Cocoa) && !targetEnvironment(macCatalyst)
 import Cocoa
 
 final class MultipartFormDataParser_CocoaTests: XCTestCase {
