@@ -17,6 +17,7 @@ jobs:
         xcode: [11.6, 12]
         destination: 
           - "platform=macOS"
+          - "platform=macOS,variant=Mac Catalyst"
           - "platform=iOS Simulator,name=iPhone 11 Pro"
           - "platform=tvOS Simulator,name=Apple TV 4K"
           # - "platform=watchOS Simulator,name=Apple Watch Series 5 - 44mm"
