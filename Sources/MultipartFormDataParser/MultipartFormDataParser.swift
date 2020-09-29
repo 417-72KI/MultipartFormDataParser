@@ -53,11 +53,10 @@ extension MultipartFormDataParser {
         guard let contentType = request.value(forHTTPHeaderField: "Content-Type") else {
             throw MultipartFormDataError.noContentType
         }
-        let regex = try NSRegularExpression(pattern: #"multipart/form-data; boundary=(.*)"#)
-        guard let matched = regex.firstMatch(in: contentType, range: NSRange(location: 0, length: contentType.count))?.range(at: 1) else {
+        let regex = RegularExpression(pattern: #"multipart/form-data; boundary=(.*)"#)
+        guard let boundary = regex.firstMatch(in: contentType)?.range(at: 1) else {
             throw MultipartFormDataError.invalidContentType(contentType)
         }
-        let boundary = (contentType as NSString).substring(with: matched)
         guard let stream = request.httpBodyStream else {
             throw MultipartFormDataError.httpBodyStreamEmpty
         }

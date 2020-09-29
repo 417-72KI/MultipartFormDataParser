@@ -37,4 +37,10 @@ extension RegularExpression.MatchingResult {
         guard range.length > 0 else { return nil }
         return string.substring(with: range)
     }
+
+    func range(at index: Int) -> String? {
+        let range = result.range(at: index)
+        guard range.length > 0 else { return nil }
+        return string.substring(with: range)
+    }
 }
