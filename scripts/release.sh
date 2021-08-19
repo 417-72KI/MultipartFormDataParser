@@ -9,9 +9,9 @@ cd $(git rev-parse --show-toplevel)
 
 PACKAGE_NAME='MultipartFormDataParser'
 
-CURRENT_BRANCH=$(git branch | grep '* master')
+CURRENT_BRANCH=$(git branch | grep '* main')
 if [ "${CURRENT_BRANCH}" = '' ]; then
-    echo '[Error] this script must be run in master branch.'
+    echo '[Error] this script must be run in main branch.'
     exit 1
 fi
 

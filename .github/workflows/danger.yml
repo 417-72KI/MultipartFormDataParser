@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, synchronize, edited]
     branches: 
-      - master
+      - main
       - hotfix
 jobs:
   danger:
@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Danger
-        uses: 417-72KI/danger-swiftlint@v1.0.1
+        uses: 417-72KI/danger-swiftlint@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
