@@ -1,17 +1,12 @@
 #!/bin/zsh
 
-if ! type "github-release" > /dev/null; then
-    echo '`github-release` not found. Install'
-    go get github.com/aktau/github-release
-fi
-
 cd $(git rev-parse --show-toplevel)
 
 PACKAGE_NAME='MultipartFormDataParser'
 
-CURRENT_BRANCH=$(git branch | grep '* main')
+CURRENT_BRANCH=$(git branch | grep '* release')
 if [ "${CURRENT_BRANCH}" = '' ]; then
-    echo '[Error] this script must be run in main branch.'
+    echo '[Error] this script must be run in release branch.'
     exit 1
 fi
 
@@ -37,16 +32,16 @@ fi
 # Generate xcodeproj
 swift package generate-xcodeproj
 
-git add ${PACKAGE_NAME}.xcodeproj
+# commit
+git config advice.addIgnoredFile false
+git config user.name github-actions
+git config user.email github-actions@github.com
+git add ${PACKAGE_NAME}.xcodeproj/project.pbxproj
 git commit -m 'Update xcodeproj'
 git push origin
 
-# TAG
-git tag ${TAG}
-git push origin ${TAG}
-
-# GitHub Release
-github-release release \
-    --user 417-72KI \
-    --repo ${PACKAGE_NAME} \
-    --tag ${TAG}
+# Draft release
+curl -X POST \
+-H "Authorization: token ${GITHUB_TOKEN}" \
+-d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
+https://api.github.com/repos/417-72KI/MultipartFormDataParser/releases
