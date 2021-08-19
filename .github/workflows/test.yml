@@ -24,6 +24,13 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            .build
+          key: ${{ runner.os }}-xcode${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode${{ matrix.xcode }}-
       - name: test
         run: | 
           set -o pipefail && \
@@ -44,6 +51,13 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            .build
+          key: ${{ runner.os }}-xcode${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode${{ matrix.xcode }}-
       - name: test
         run: | 
           set -o pipefail && \
