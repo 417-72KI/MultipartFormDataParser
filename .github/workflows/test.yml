@@ -60,9 +60,9 @@ jobs:
         with:
           path: |
             .build
-          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ matrix.destination }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-xcode_${{ matrix.xcode }}-
+            ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ matrix.destination }}-
       - name: test
         run: | 
           set -o pipefail && \
