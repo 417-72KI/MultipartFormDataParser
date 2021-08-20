@@ -5,7 +5,7 @@ on:
       - main
       - hotfix
     paths:
-      # - .github/workflows/test.yml
+      - .github/workflows/test.yml
       - Package.*
       - Sources/**/*.swift
       - Tests/**/*.swift
@@ -14,7 +14,7 @@ on:
       - main
       - hotfix
     paths:
-      # - .github/workflows/test.yml
+      - .github/workflows/test.yml
       - Package.*
       - Sources/**/*.swift
       - Tests/**/*.swift
