@@ -28,14 +28,19 @@ jobs:
         with:
           path: |
             .build
-          key: ${{ runner.os }}-xcode${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-xcode${{ matrix.xcode }}-
+            ${{ runner.os }}-xcode_${{ matrix.xcode }}-
       - name: test
         run: | 
           set -o pipefail && \
           rm -rf 'MultipartFormDataParser.xcodeproj' && \
-          xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "${{ matrix.destination }}" clean test | xcpretty
+          xcrun xcodebuild \
+          -enableCodeCoverage YES \
+          -scheme MultipartFormDataParser \
+          -destination "${{ matrix.destination }}" \
+          -derivedDataPath '.build' \
+          clean test | xcpretty
   big_sur:
     name: Big Sur
     runs-on: macos-11
@@ -55,11 +60,16 @@ jobs:
         with:
           path: |
             .build
-          key: ${{ runner.os }}-xcode${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-xcode${{ matrix.xcode }}-
+            ${{ runner.os }}-xcode_${{ matrix.xcode }}-
       - name: test
         run: | 
           set -o pipefail && \
           rm -rf 'MultipartFormDataParser.xcodeproj' && \
-          xcrun xcodebuild -enableCodeCoverage YES -scheme MultipartFormDataParser -destination "${{ matrix.destination }}" clean test | xcpretty
+          xcrun xcodebuild \
+          -enableCodeCoverage YES \
+          -scheme MultipartFormDataParser \
+          -destination "${{ matrix.destination }}" \
+          -derivedDataPath '.build' \
+          clean test | xcpretty
