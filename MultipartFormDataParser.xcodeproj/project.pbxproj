@@ -550,13 +550,13 @@
       "OBJ_151" = {
          isa = "PBXGroup";
          children = (
+            "APIKit::APIKit::Product",
             "Alamofire::Alamofire::Product",
             "Moya::Moya::Product",
-            "APIKit::APIKit::Product",
-            "OHHTTPStubs::OHHTTPStubsSwift::Product",
-            "OHHTTPStubs::OHHTTPStubs::Product",
+            "MultipartFormDataParser::MultipartFormDataParser::Product",
             "MultipartFormDataParser::MultipartFormDataParserTests::Product",
-            "MultipartFormDataParser::MultipartFormDataParser::Product"
+            "OHHTTPStubs::OHHTTPStubs::Product",
+            "OHHTTPStubs::OHHTTPStubsSwift::Product"
          );
          name = "Products";
          path = "";
@@ -599,6 +599,7 @@
       "OBJ_165" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -640,6 +641,7 @@
       "OBJ_166" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -856,7 +858,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.0.0"
             );
@@ -874,7 +876,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.0.0"
             );
@@ -918,6 +920,7 @@
       "OBJ_200" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -961,6 +964,7 @@
       "OBJ_201" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1232,7 +1236,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.1.0"
             );
@@ -1250,7 +1254,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.1.0"
             );
@@ -1280,6 +1284,7 @@
       "OBJ_247" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1321,6 +1326,7 @@
       "OBJ_248" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1527,7 +1533,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.0.0"
             );
@@ -1545,7 +1551,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.0.0"
             );
@@ -1580,6 +1586,7 @@
       "OBJ_284" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1621,6 +1628,7 @@
       "OBJ_285" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1723,7 +1731,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.1.0"
             );
@@ -1741,7 +1749,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.1.0"
             );
@@ -1783,14 +1791,9 @@
             PRODUCT_NAME = "$(TARGET_NAME)";
             SDKROOT = "macosx";
             SUPPORTED_PLATFORMS = (
-               "macosx",
-               "iphoneos",
-               "iphonesimulator",
-               "appletvos",
-               "appletvsimulator",
-               "watchos",
-               "watchsimulator"
+               "$(AVAILABLE_PLATFORMS)"
             );
+            SUPPORTS_MACCATALYST = "YES";
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)",
                "SWIFT_PACKAGE",
@@ -1844,6 +1847,7 @@
          isa = "XCBuildConfiguration";
          buildSettings = {
             CLANG_ENABLE_MODULES = "YES";
+            CURRENT_PROJECT_VERSION = "1";
             EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1879,7 +1883,7 @@
             SWIFT_VERSION = "5.0";
             TARGET_NAME = "MultipartFormDataParserTests";
             TVOS_DEPLOYMENT_TARGET = "11.0";
-            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+            WATCHOS_DEPLOYMENT_TARGET = "7.0";
          };
          name = "Debug";
       };
@@ -1887,6 +1891,7 @@
          isa = "XCBuildConfiguration";
          buildSettings = {
             CLANG_ENABLE_MODULES = "YES";
+            CURRENT_PROJECT_VERSION = "1";
             EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -1922,7 +1927,7 @@
             SWIFT_VERSION = "5.0";
             TARGET_NAME = "MultipartFormDataParserTests";
             TVOS_DEPLOYMENT_TARGET = "11.0";
-            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+            WATCHOS_DEPLOYMENT_TARGET = "7.0";
          };
          name = "Release";
       };
@@ -2086,6 +2091,7 @@
       "OBJ_337" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             DEFINES_MODULE = "NO";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
@@ -2128,6 +2134,7 @@
       "OBJ_338" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             DEFINES_MODULE = "NO";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
@@ -2264,7 +2271,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.0.0"
             );
@@ -2282,7 +2289,7 @@
                "-I",
                "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
                "-sdk",
-               "/Applications/Xcode_12.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "/Applications/Xcode_12.5.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.3.sdk",
                "-package-description-version",
                "5.0.0"
             );
@@ -2312,6 +2319,7 @@
       "OBJ_355" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -2357,6 +2365,7 @@
       "OBJ_356" = {
          isa = "XCBuildConfiguration";
          buildSettings = {
+            CURRENT_PROJECT_VERSION = "1";
             ENABLE_TESTABILITY = "YES";
             FRAMEWORK_SEARCH_PATHS = (
                "$(inherited)",
@@ -2464,14 +2473,9 @@
             PRODUCT_NAME = "$(TARGET_NAME)";
             SDKROOT = "macosx";
             SUPPORTED_PLATFORMS = (
-               "macosx",
-               "iphoneos",
-               "iphonesimulator",
-               "appletvos",
-               "appletvsimulator",
-               "watchos",
-               "watchsimulator"
+               "$(AVAILABLE_PLATFORMS)"
             );
+            SUPPORTS_MACCATALYST = "YES";
             SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
                "$(inherited)",
                "SWIFT_PACKAGE"

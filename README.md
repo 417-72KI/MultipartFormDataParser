@@ -75,6 +75,6 @@ github "417-72KI/MultipartFormDataParser"
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.2.0")
+    .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.3.0")
 ]
 ```
