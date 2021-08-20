@@ -16,9 +16,9 @@ extension XCTestCase {
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         request.httpBody = createBody(boundary: boundary,
-                              genbaNeko: genbaNeko,
-                              denwaNeko: denwaNeko,
-                              message: message)
+                                      genbaNeko: genbaNeko,
+                                      denwaNeko: denwaNeko,
+                                      message: message)
         var responseData: Data!
         URLSession.shared.dataTask(with: request) { data, _, _ in
             responseData = data
@@ -41,12 +41,12 @@ extension XCTestCase {
         var request = URLRequest(url: URL(string: "https://localhost/upload")!)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        let data = createBody(boundary: boundary,
-                              genbaNeko: genbaNeko,
-                              denwaNeko: denwaNeko,
-                              message: message)
+        let requestBody = createBody(boundary: boundary,
+                                     genbaNeko: genbaNeko,
+                                     denwaNeko: denwaNeko,
+                                     message: message)
         var responseData: Data!
-        URLSession.shared.uploadTask(with: request, from: data) { data, _, _ in
+        URLSession.shared.uploadTask(with: request, from: requestBody) { data, _, _ in
             responseData = data
             exp.fulfill()
         }.resume()
