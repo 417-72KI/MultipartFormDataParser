@@ -19,14 +19,13 @@ extension XCTestCase {
                               genbaNeko: genbaNeko,
                               denwaNeko: denwaNeko,
                               message: message)
-        var entity: TestEntity!
+        var responseData: Data!
         URLSession.shared.dataTask(with: request) { data, _, _ in
-            defer { exp.fulfill() }
-            entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
+            responseData = data
+            exp.fulfill()
         }.resume()
-
         waitForExpectations(timeout: timeoutInterval)
-        return entity
+        return try JSONDecoder().decode(TestEntity.self, from: (try XCTUnwrap(responseData)))
     }
 
     func uploadURLSessionUploadTask(
@@ -46,14 +45,13 @@ extension XCTestCase {
                               genbaNeko: genbaNeko,
                               denwaNeko: denwaNeko,
                               message: message)
-        var entity: TestEntity!
+        var responseData: Data!
         URLSession.shared.uploadTask(with: request, from: data) { data, _, _ in
-            defer { exp.fulfill() }
-            entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
+            responseData = data
+            exp.fulfill()
         }.resume()
-
         waitForExpectations(timeout: timeoutInterval)
-        return entity
+        return try JSONDecoder().decode(TestEntity.self, from: (try XCTUnwrap(responseData)))
     }
 }
 

@@ -11,7 +11,7 @@ extension XCTestCase {
         line: UInt = #line
     ) throws -> TestEntity? {
         let exp = expectation(description: "response")
-        let request = AF.upload(
+        let task = AF.upload(
             multipartFormData: { formData in
                 formData.append(
                     genbaNeko,
@@ -28,14 +28,19 @@ extension XCTestCase {
                 formData.append(message, withName: "message")
             },
             to: "https://localhost/upload"
-            ).responseJSON { _ in exp.fulfill() }
+        )
+        var response: AFDataResponse<Any>!
+        task.responseJSON {
+            response = $0
+            exp.fulfill()
+        }
         waitForExpectations(timeout: timeoutInterval)
-        let response = try XCTUnwrap(request.response, file: file, line: line)
-        XCTAssertEqual(response.statusCode, 200, file: file, line: line)
-        guard let data = request.data else { return nil }
+
+        XCTAssertNotNil(response, file: file, line: line)
+        XCTAssertEqual(response?.response?.statusCode, 200, file: file, line: line)
 
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(TestEntity.self, from: data)
+        return try decoder.decode(TestEntity.self, from: try XCTUnwrap(response?.data))
     }
 }
