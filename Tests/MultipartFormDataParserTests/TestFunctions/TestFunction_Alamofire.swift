@@ -29,7 +29,7 @@ extension XCTestCase {
             },
             to: "https://localhost/upload"
             ).responseJSON { _ in exp.fulfill() }
-        wait(for: [exp], timeout: 10)
+        waitForExpectations(timeout: timeoutInterval)
         let response = try XCTUnwrap(request.response, file: file, line: line)
         XCTAssertEqual(response.statusCode, 200, file: file, line: line)
         guard let data = request.data else { return nil }

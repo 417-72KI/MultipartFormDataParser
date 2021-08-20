@@ -25,7 +25,7 @@ extension XCTestCase {
             entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
         }.resume()
 
-        wait(for: [exp], timeout: 10)
+        waitForExpectations(timeout: timeoutInterval)
         return entity
     }
 
@@ -52,7 +52,7 @@ extension XCTestCase {
             entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
         }.resume()
 
-        wait(for: [exp], timeout: 10)
+        waitForExpectations(timeout: timeoutInterval)
         return entity
     }
 }

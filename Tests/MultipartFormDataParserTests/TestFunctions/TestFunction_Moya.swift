@@ -32,7 +32,7 @@ extension XCTestCase {
             }
         }
 
-        wait(for: [exp], timeout: 10)
+        waitForExpectations(timeout: timeoutInterval)
         return entity
     }
 }
