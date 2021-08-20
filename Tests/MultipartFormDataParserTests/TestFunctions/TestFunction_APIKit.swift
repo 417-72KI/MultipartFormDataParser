@@ -18,15 +18,14 @@ extension XCTestCase {
             file: file,
             line: line
         )
-        var entity: TestEntity!
-        Session.shared.send(request, callbackQueue: nil) { result in
-            defer { exp.fulfill() }
-            guard case let .success(response) = result else { return }
-            entity = response
+        var result: Result<TestRequest.Response, SessionTaskError>!
+        Session.shared.send(request, callbackQueue: nil) {
+            result = $0
+            exp.fulfill()
         }
 
-        wait(for: [exp], timeout: 10)
-        return entity
+        waitForExpectations(timeout: timeoutInterval)
+        return try result.get()
     }
 }
 

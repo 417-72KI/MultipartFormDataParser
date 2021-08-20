@@ -16,17 +16,16 @@ extension XCTestCase {
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         request.httpBody = createBody(boundary: boundary,
-                              genbaNeko: genbaNeko,
-                              denwaNeko: denwaNeko,
-                              message: message)
-        var entity: TestEntity!
+                                      genbaNeko: genbaNeko,
+                                      denwaNeko: denwaNeko,
+                                      message: message)
+        var responseData: Data!
         URLSession.shared.dataTask(with: request) { data, _, _ in
-            defer { exp.fulfill() }
-            entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
+            responseData = data
+            exp.fulfill()
         }.resume()
-
-        wait(for: [exp], timeout: 10)
-        return entity
+        waitForExpectations(timeout: timeoutInterval)
+        return try JSONDecoder().decode(TestEntity.self, from: (try XCTUnwrap(responseData)))
     }
 
     func uploadURLSessionUploadTask(
@@ -42,18 +41,17 @@ extension XCTestCase {
         var request = URLRequest(url: URL(string: "https://localhost/upload")!)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        let data = createBody(boundary: boundary,
-                              genbaNeko: genbaNeko,
-                              denwaNeko: denwaNeko,
-                              message: message)
-        var entity: TestEntity!
-        URLSession.shared.uploadTask(with: request, from: data) { data, _, _ in
-            defer { exp.fulfill() }
-            entity = try? data.flatMap { try JSONDecoder().decode(TestEntity.self, from: $0) }
+        let requestBody = createBody(boundary: boundary,
+                                     genbaNeko: genbaNeko,
+                                     denwaNeko: denwaNeko,
+                                     message: message)
+        var responseData: Data!
+        URLSession.shared.uploadTask(with: request, from: requestBody) { data, _, _ in
+            responseData = data
+            exp.fulfill()
         }.resume()
-
-        wait(for: [exp], timeout: 10)
-        return entity
+        waitForExpectations(timeout: timeoutInterval)
+        return try JSONDecoder().decode(TestEntity.self, from: (try XCTUnwrap(responseData)))
     }
 }
 

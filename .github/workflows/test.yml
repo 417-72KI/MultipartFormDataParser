@@ -4,10 +4,20 @@ on:
     branches: 
       - main
       - hotfix
+    paths:
+      - .github/workflows/test.yml
+      - Package.*
+      - Sources/**/*.swift
+      - Tests/**/*.swift
   pull_request:
     branches: 
       - main
       - hotfix
+    paths:
+      - .github/workflows/test.yml
+      - Package.*
+      - Sources/**/*.swift
+      - Tests/**/*.swift
 jobs:
   catalina:
     name: Catalina
@@ -30,10 +40,10 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            .build/SourcePackages
-          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-${{ hashFiles('Package.resolved') }}
+            .build/SourcePackages/checkouts
+          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-
+            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-
       - name: test
         run: | 
           set -o pipefail && \
@@ -65,10 +75,10 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: |
-            .build/SourcePackages
-          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-${{ hashFiles('Package.resolved') }}
+            .build/SourcePackages/checkouts
+          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-xcode_${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-
+            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-
       - name: test
         run: | 
           set -o pipefail && \

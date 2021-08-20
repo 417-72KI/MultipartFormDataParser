@@ -19,21 +19,17 @@ extension XCTestCase {
             file: file,
             line: line
         )
-        var entity: TestEntity!
-        MoyaProvider().request(target) { result in
-            defer { exp.fulfill() }
-            guard case let .success(response) = result else { return }
-            do {
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                entity = try decoder.decode(TestEntity.self, from: response.data)
-            } catch {
-                XCTFail("\(error)", file: file, line: line)
-            }
+        var result: Result<Response, MoyaError>!
+        MoyaProvider().request(target) {
+            result = $0
+            exp.fulfill()
         }
+        waitForExpectations(timeout: timeoutInterval)
 
-        wait(for: [exp], timeout: 10)
-        return entity
+        XCTAssertNotNil(result)
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return try decoder.decode(TestEntity.self, from: try XCTUnwrap(try result.get().data))
     }
 }
 
@@ -55,8 +51,8 @@ extension TestTarget {
     var task: Task {
         let formData: [Moya.MultipartFormData] = [
             Moya.MultipartFormData(provider: .data(genbaNeko), name: "genbaNeko", fileName: "genbaNeko.jpeg", mimeType: "image/jpeg"),
-        Moya.MultipartFormData(provider: .data(denwaNeko), name: "denwaNeko", fileName: "denwaNeko.jpeg", mimeType: "image/jpeg"),
-        Moya.MultipartFormData(provider: .data(message), name: "message")
+            Moya.MultipartFormData(provider: .data(denwaNeko), name: "denwaNeko", fileName: "denwaNeko.jpeg", mimeType: "image/jpeg"),
+            Moya.MultipartFormData(provider: .data(message), name: "message")
         ]
         return .uploadMultipart(formData)
     }

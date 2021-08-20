@@ -33,9 +33,7 @@ private var uploadTestStubResponse: HTTPStubsResponseBlock = { request in
         guard let denwaNeko = data.element(forName: "denwaNeko") else { return errorResponse("denwaNeko") }
         guard let message = data.element(forName: "message") else { return errorResponse("message") }
         guard let _ = Image(data: genbaNeko.data) else { return errorResponse("Unexpected genbaNeko") }
-        // try genbaNeko.data.write(to: URL(fileURLWithPath: ("~/work/genbaNeko.jpg" as NSString).expandingTildeInPath), options: .atomicWrite)
         guard let _ = Image(data: denwaNeko.data) else { return errorResponse("Unexpected denwaNeko") }
-        // try denwaNeko.data.write(to: URL(fileURLWithPath: ("~/work/denwaNeko.jpg" as NSString).expandingTildeInPath), options: .atomicWrite)
         guard message.string == "Hello world!" else { return errorResponse("Unexpected message: \(message)") }
     } catch {
         return .init(error: error)
