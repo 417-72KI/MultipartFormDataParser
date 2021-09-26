@@ -21,7 +21,7 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.4.3")),
         .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.1.0")),
         .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.2.0")),
-        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "14.0.1"))
+        .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.0"))
         ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
