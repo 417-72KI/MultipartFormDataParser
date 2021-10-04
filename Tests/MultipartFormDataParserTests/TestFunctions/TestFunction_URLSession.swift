@@ -6,6 +6,7 @@ extension XCTestCase {
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
+        retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TestEntity? {
@@ -25,13 +26,24 @@ extension XCTestCase {
             exp.fulfill()
         }.resume()
         waitForExpectations(timeout: timeoutInterval)
-        return try JSONDecoder().decode(TestEntity.self, from: (try XCTUnwrap(responseData)))
+
+        guard let data = responseData else {
+            return try uploadURLSessionDataTask(genbaNeko: genbaNeko,
+                                                denwaNeko: denwaNeko,
+                                                message: message,
+                                                retryCount: retryCount - 1,
+                                                file: file,
+                                                line: line)
+        }
+
+        return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 
     func uploadURLSessionUploadTask(
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
+        retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TestEntity? {
@@ -51,7 +63,15 @@ extension XCTestCase {
             exp.fulfill()
         }.resume()
         waitForExpectations(timeout: timeoutInterval)
-        return try JSONDecoder().decode(TestEntity.self, from: (try XCTUnwrap(responseData)))
+        guard let data = responseData else {
+            return try uploadURLSessionUploadTask(genbaNeko: genbaNeko,
+                                                  denwaNeko: denwaNeko,
+                                                  message: message,
+                                                  retryCount: retryCount - 1,
+                                                  file: file,
+                                                  line: line)
+        }
+        return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 }
 

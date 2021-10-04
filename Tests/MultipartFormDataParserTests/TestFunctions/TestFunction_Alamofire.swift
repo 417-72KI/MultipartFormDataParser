@@ -7,6 +7,7 @@ extension XCTestCase {
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
+        retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TestEntity? {
@@ -27,7 +28,8 @@ extension XCTestCase {
                 )
                 formData.append(message, withName: "message")
             },
-            to: "https://localhost/upload"
+            to: "https://localhost/upload",
+            interceptor: Interceptor()
         )
         var response: AFDataResponse<Any>!
         task.responseJSON {
@@ -42,5 +44,19 @@ extension XCTestCase {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(TestEntity.self, from: try XCTUnwrap(response?.data))
+    }
+}
+
+private class Interceptor: RequestInterceptor {
+    private let lock = NSLock()
+
+    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+        lock.lock(); defer { lock.unlock() }
+
+        if request.retryCount < 3 {
+            completion(.retry)
+        } else {
+            completion(.doNotRetry)
+        }
     }
 }

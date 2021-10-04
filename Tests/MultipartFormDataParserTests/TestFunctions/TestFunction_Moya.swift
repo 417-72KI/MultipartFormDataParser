@@ -7,6 +7,7 @@ extension XCTestCase {
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
+        retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TestEntity? {
@@ -27,9 +28,24 @@ extension XCTestCase {
         waitForExpectations(timeout: timeoutInterval)
 
         XCTAssertNotNil(result)
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(TestEntity.self, from: try XCTUnwrap(try result.get().data))
+
+        switch result! {
+        case let .success(response):
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode(TestEntity.self, from: response.data)
+        case let .failure(error):
+            if retryCount > 0 {
+                return try uploadWithMoya(genbaNeko: genbaNeko,
+                                          denwaNeko: denwaNeko,
+                                          message: message,
+                                          retryCount: retryCount - 1,
+                                          file: file,
+                                          line: line)
+            } else {
+                throw error
+            }
+        }
     }
 }
 
