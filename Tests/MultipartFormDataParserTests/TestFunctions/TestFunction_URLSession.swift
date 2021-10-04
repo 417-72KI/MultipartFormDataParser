@@ -27,7 +27,7 @@ extension XCTestCase {
         }.resume()
         waitForExpectations(timeout: timeoutInterval)
 
-        guard let responseData = responseData else {
+        guard let data = responseData else {
             return try uploadURLSessionDataTask(genbaNeko: genbaNeko,
                                                 denwaNeko: denwaNeko,
                                                 message: message,
@@ -36,7 +36,7 @@ extension XCTestCase {
                                                 line: line)
         }
 
-        return try JSONDecoder().decode(TestEntity.self, from: responseData)
+        return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 
     func uploadURLSessionUploadTask(
@@ -63,7 +63,7 @@ extension XCTestCase {
             exp.fulfill()
         }.resume()
         waitForExpectations(timeout: timeoutInterval)
-        guard let responseData = responseData else {
+        guard let data = responseData else {
             return try uploadURLSessionUploadTask(genbaNeko: genbaNeko,
                                                   denwaNeko: denwaNeko,
                                                   message: message,
@@ -71,7 +71,7 @@ extension XCTestCase {
                                                   file: file,
                                                   line: line)
         }
-        return try JSONDecoder().decode(TestEntity.self, from: responseData)
+        return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 }
 
