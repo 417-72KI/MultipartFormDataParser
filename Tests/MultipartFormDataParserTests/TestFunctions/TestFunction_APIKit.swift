@@ -7,9 +7,10 @@ extension XCTestCase {
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
+        retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
-    ) throws -> TestEntity? {
+    ) throws -> TestEntity {
         let exp = expectation(description: "response")
         let request = TestRequest(
             genbaNeko: genbaNeko,
@@ -24,8 +25,18 @@ extension XCTestCase {
             exp.fulfill()
         }
 
-        waitForExpectations(timeout: timeoutInterval)
-        return try result.get()
+        wait(for: [exp], timeout: 10)
+
+        switch result! {
+        case let .success(response):
+            return response
+        case let .failure(error):
+            if retryCount > 0 {
+                return try uploadWithAPIKit(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message, retryCount: retryCount - 1, file: file, line: line)
+            } else {
+                throw error
+            }
+        }
     }
 }
 
