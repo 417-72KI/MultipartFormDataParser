@@ -1,6 +1,7 @@
 import Foundation
 import XCTest
 
+#if canImport(OHHTTPStubs)
 extension XCTestCase {
     func uploadURLSessionDataTask(
         genbaNeko: Data,
@@ -67,6 +68,7 @@ extension XCTestCase {
         return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 }
+#endif
 
 extension XCTestCase {
     func createRequest(
