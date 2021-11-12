@@ -1,6 +1,8 @@
-import APIKit
 import Foundation
 import XCTest
+
+#if canImport(APIKit)
+import APIKit
 
 extension XCTestCase {
     func requestWithAPIKit(
@@ -105,3 +107,4 @@ private struct TestRequest: APIKit.Request {
         }
     }
 }
+#endif

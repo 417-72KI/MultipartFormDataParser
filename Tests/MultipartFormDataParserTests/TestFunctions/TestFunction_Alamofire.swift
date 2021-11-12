@@ -1,6 +1,8 @@
-import Alamofire
 import Foundation
 import XCTest
+
+#if canImport(Alamofire)
+import Alamofire
 
 extension XCTestCase {
     func uploadWithAlamoFire(
@@ -60,3 +62,4 @@ private class Interceptor: RequestInterceptor {
         }
     }
 }
+#endif

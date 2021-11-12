@@ -25,6 +25,7 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
         XCTAssertEqual(data.element(forName: "message")?.string, "Hello world!")
     }
 
+    #if canImport(Alamofire)
     func testAlamofire() throws {
         let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)
         let denwaNeko = try XCTUnwrap(NSImage(data: TestResource.denwaNeko)?.jpegRepresentation)
@@ -34,7 +35,9 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
+    #endif
 
+    #if canImport(APIKit)
     func testAPIKit() throws {
         let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)
         let denwaNeko = try XCTUnwrap(NSImage(data: TestResource.denwaNeko)?.jpegRepresentation)
@@ -56,7 +59,9 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
             XCTAssertNil(result.error)
         }
     }
+    #endif
 
+    #if canImport(Moya)
     func testMoya() throws {
         let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)
         let denwaNeko = try XCTUnwrap(NSImage(data: TestResource.denwaNeko)?.jpegRepresentation)
@@ -66,6 +71,7 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
+    #endif
 
     func testURLSessionDataTask() throws {
         let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)

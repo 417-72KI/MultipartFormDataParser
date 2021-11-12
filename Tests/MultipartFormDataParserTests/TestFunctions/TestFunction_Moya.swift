@@ -1,6 +1,8 @@
 import Foundation
-import Moya
 import XCTest
+
+#if canImport(Moya)
+import Moya
 
 extension XCTestCase {
     func uploadWithMoya(
@@ -75,3 +77,4 @@ extension TestTarget {
     var validationType: ValidationType { .successCodes }
     var sampleData: Data { .init() }
 }
+#endif
