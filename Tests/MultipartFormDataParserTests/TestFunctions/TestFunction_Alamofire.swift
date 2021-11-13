@@ -56,6 +56,7 @@ private class Interceptor: RequestInterceptor {
         lock.lock(); defer { lock.unlock() }
 
         if request.retryCount < 3 {
+            print("retry: \(request.retryCount)")
             completion(.retry)
         } else {
             completion(.doNotRetry)

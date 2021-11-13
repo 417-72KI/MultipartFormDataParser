@@ -38,6 +38,7 @@ extension XCTestCase {
             return try decoder.decode(TestEntity.self, from: response.data)
         case let .failure(error):
             if retryCount > 0 {
+                print("retry: \(retryCount)")
                 return try uploadWithMoya(genbaNeko: genbaNeko,
                                           denwaNeko: denwaNeko,
                                           message: message,
