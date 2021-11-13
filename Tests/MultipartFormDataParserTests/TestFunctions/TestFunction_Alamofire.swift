@@ -1,6 +1,8 @@
-import Alamofire
 import Foundation
 import XCTest
+
+#if canImport(Alamofire)
+import Alamofire
 
 extension XCTestCase {
     func uploadWithAlamoFire(
@@ -54,9 +56,11 @@ private class Interceptor: RequestInterceptor {
         lock.lock(); defer { lock.unlock() }
 
         if request.retryCount < 3 {
+            print("retry: \(request.retryCount)")
             completion(.retry)
         } else {
             completion(.doNotRetry)
         }
     }
 }
+#endif

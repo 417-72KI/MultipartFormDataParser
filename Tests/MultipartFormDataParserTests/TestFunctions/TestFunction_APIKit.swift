@@ -1,6 +1,8 @@
-import APIKit
 import Foundation
 import XCTest
+
+#if canImport(APIKit)
+import APIKit
 
 extension XCTestCase {
     func requestWithAPIKit(
@@ -47,6 +49,7 @@ extension XCTestCase {
             return response
         case let .failure(error):
             if retryCount > 0 {
+                print("retry: \(retryCount)")
                 return try uploadWithAPIKit(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message, retryCount: retryCount - 1, file: file, line: line)
             } else {
                 throw error
@@ -105,3 +108,4 @@ private struct TestRequest: APIKit.Request {
         }
     }
 }
+#endif
