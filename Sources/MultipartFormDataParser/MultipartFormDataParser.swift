@@ -9,8 +9,11 @@ struct MultipartFormDataParser {
 // MARK: - Functions
 private extension MultipartFormDataParser {
     func parse(_ stream: InputStream) throws -> MultipartFormData {
-        let data = extractData(from: stream)
-            .split(separator: crlf)
+        try parse(extractData(from: stream))
+    }
+
+    func parse(_ data: Data) throws -> MultipartFormData {
+        let data = data.split(separator: crlf)
         let elements = try split(data, withBoundary: boundary)
             .compactMap(MultipartFormData.Element.from)
         return MultipartFormData(elements: elements)
@@ -56,6 +59,9 @@ extension MultipartFormDataParser {
         let regex = RegularExpression(pattern: #"multipart/form-data; boundary=(.*)"#)
         guard let boundary = regex.firstMatch(in: contentType)?.range(at: 1) else {
             throw MultipartFormDataError.invalidContentType(contentType)
+        }
+        if let body = request.httpBody, !body.isEmpty {
+            return try Self(boundary: boundary).parse(body)
         }
         guard let stream = request.httpBodyStream else {
             throw MultipartFormDataError.httpBodyStreamEmpty

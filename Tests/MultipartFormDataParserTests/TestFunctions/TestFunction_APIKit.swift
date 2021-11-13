@@ -3,6 +3,21 @@ import Foundation
 import XCTest
 
 extension XCTestCase {
+    func requestWithAPIKit(
+        genbaNeko: Data,
+        denwaNeko: Data,
+        message: Data,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) throws -> URLRequest {
+        try TestRequest(genbaNeko: genbaNeko,
+                        denwaNeko: denwaNeko,
+                        message: message,
+                        file: file,
+                        line: line)
+            .buildURLRequest()
+    }
+
     func uploadWithAPIKit(
         genbaNeko: Data,
         denwaNeko: Data,

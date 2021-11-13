@@ -12,14 +12,7 @@ extension XCTestCase {
     ) throws -> TestEntity? {
         let exp = expectation(description: "response")
 
-        let boundary = "YoWatanabe0417"
-        var request = URLRequest(url: URL(string: "https://localhost/upload")!)
-        request.httpMethod = "POST"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.httpBody = createBody(boundary: boundary,
-                                      genbaNeko: genbaNeko,
-                                      denwaNeko: denwaNeko,
-                                      message: message)
+        let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
         var responseData: Data!
         URLSession.shared.dataTask(with: request) { data, _, _ in
             responseData = data
@@ -72,6 +65,28 @@ extension XCTestCase {
                                                   line: line)
         }
         return try JSONDecoder().decode(TestEntity.self, from: data)
+    }
+}
+
+extension XCTestCase {
+    func createRequest(
+        genbaNeko: Data,
+        denwaNeko: Data,
+        message: Data,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> URLRequest {
+        let boundary = "YoWatanabe0417"
+        var request = URLRequest(url: URL(string: "https://localhost/upload")!)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = createBody(
+            boundary: boundary,
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            message: message
+        )
+        return request
     }
 }
 
