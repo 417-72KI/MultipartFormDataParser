@@ -8,21 +8,28 @@ import UIKit
 typealias Image = UIImage
 #endif
 
+#if canImport(OHHTTPStubs)
 import OHHTTPStubs
 import OHHTTPStubsSwift
+#endif
 
 import MultipartFormDataParser
 
 func stubForUpload() {
+    #if canImport(OHHTTPStubs)
     let condition = isHost("localhost")
         && isPath("/upload")
     stub(condition: condition, response: uploadTestStubResponse)
+    #endif
 }
 
 func clearStubs() {
+    #if canImport(OHHTTPStubs)
     HTTPStubs.removeAllStubs()
+    #endif
 }
 
+#if canImport(OHHTTPStubs)
 private var uploadTestStubResponse: HTTPStubsResponseBlock = { request in
     let errorResponse = { (message: String) -> HTTPStubsResponse in
         .init(jsonObject: ["status": 403, "error": message], statusCode: 403, headers: ["Content-Type": "application/json"])
@@ -44,3 +51,4 @@ private var uploadTestStubResponse: HTTPStubsResponseBlock = { request in
         headers: ["Content-Type": "application/json"]
     )
 }
+#endif

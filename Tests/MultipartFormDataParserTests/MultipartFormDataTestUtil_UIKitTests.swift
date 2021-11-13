@@ -73,6 +73,7 @@ final class MultipartFormDataParser_UIKitTests: XCTestCase {
     }
     #endif
 
+    #if canImport(OHHTTPStubs)
     func testURLSessionUploadTask() throws {
         let genbaNeko = try XCTUnwrap(UIImage(data: TestResource.genbaNeko)?.jpegData(compressionQuality: 1))
         let denwaNeko = try XCTUnwrap(UIImage(data: TestResource.denwaNeko)?.jpegData(compressionQuality: 1))
@@ -90,5 +91,6 @@ final class MultipartFormDataParser_UIKitTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
+    #endif
 }
 #endif
