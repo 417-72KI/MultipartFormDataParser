@@ -43,7 +43,31 @@ git commit -m 'Update xcodeproj'
 git push origin
 
 # Draft release
-curl -X POST \
+RELEASES_FILE='releases.json'
+curl -X GET \
 -H "Authorization: token ${GITHUB_TOKEN}" \
--d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
-https://api.github.com/repos/417-72KI/MultipartFormDataParser/releases
+https://api.github.com/repos/417-72KI/MultipartFormDataParser/releases \
+-o $RELEASES_FILE \
+2>/dev/null
+
+EXISTING_RELEASE=$(cat $RELEASES_FILE | jq ".[] | select(contains({tag_name: \"${TAG}\"}))")
+
+if [ "$EXISTING_RELEASE" != '' ]; then
+    if [ "$(echo $EXISTING_RELEASE | jq '.draft')" = 'true' ]; then
+        UPDATE_URL=$(echo $EXISTING_RELEASE | jq -r '.url')
+        curl -X PATCH \
+        -H "Authorization: token ${GITHUB_TOKEN}" \
+        -d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
+        "$UPDATE_URL"
+    else
+        echo "[Error] ${TAG} already exists."
+        exit 1
+    fi
+else
+    curl -X POST \
+    -H "Authorization: token ${GITHUB_TOKEN}" \
+    -d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
+    https://api.github.com/repos/417-72KI/MultipartFormDataParser/releases
+fi
+
+rm $RELEASES_FILE
