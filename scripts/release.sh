@@ -35,12 +35,13 @@ fi
 swift package generate-xcodeproj
 
 # commit
-git config advice.addIgnoredFile false
-git config user.name github-actions
-git config user.email github-actions@github.com
-git add -f ${PACKAGE_NAME}.xcodeproj/project.pbxproj
-git commit -m 'Update xcodeproj'
-git push origin
+if [ "$(git status -s | grep "${PACKAGE_NAME}.xcodeproj/project.pbxproj")" != '' ]; then
+    git config advice.addIgnoredFile false
+    git config user.name github-actions
+    git config user.email github-actions@github.com
+    git commit -m 'Update xcodeproj' ${PACKAGE_NAME}.xcodeproj/project.pbxproj
+    git push origin
+fi
 
 # Draft release
 RELEASES_FILE='releases.json'
