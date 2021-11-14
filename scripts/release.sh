@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -eo pipefail
+
 cd $(git rev-parse --show-toplevel)
 
 PACKAGE_NAME='MultipartFormDataParser'
