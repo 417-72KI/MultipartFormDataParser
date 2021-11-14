@@ -41,6 +41,8 @@ if [ "$(git status -s | grep "${PACKAGE_NAME}.xcodeproj/project.pbxproj")" != ''
     git config user.email github-actions@github.com
     git commit -m 'Update xcodeproj' ${PACKAGE_NAME}.xcodeproj/project.pbxproj
     git push origin
+else
+    echo 'No update on xcodeproj.'
 fi
 
 # Draft release
