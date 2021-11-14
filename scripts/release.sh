@@ -38,7 +38,7 @@ swift package generate-xcodeproj
 git config advice.addIgnoredFile false
 git config user.name github-actions
 git config user.email github-actions@github.com
-git add ${PACKAGE_NAME}.xcodeproj/project.pbxproj
+git add -f ${PACKAGE_NAME}.xcodeproj/project.pbxproj
 git commit -m 'Update xcodeproj'
 git push origin
 
