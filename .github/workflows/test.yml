@@ -37,7 +37,7 @@ jobs:
       - id: create_destination_key
         name: Create destination key for cache
         run: echo "::set-output name=destination_key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: |
             .build/SourcePackages/checkouts
