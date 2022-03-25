@@ -10,9 +10,6 @@ on:
       - Sources/**/*.swift
       - Tests/**/*.swift
   pull_request:
-    branches: 
-      - main
-      - hotfix
     paths:
       - .github/workflows/test.yml
       - Package.*
@@ -24,7 +21,7 @@ jobs:
     runs-on: macos-11
     strategy:
       matrix:
-        xcode: [12.4, 12.5.1, 13.1]
+        xcode: [12.4, 12.5.1, 13.2.1]
         destination: 
           - "platform=macOS"
           - "platform=macOS,variant=Mac Catalyst"
