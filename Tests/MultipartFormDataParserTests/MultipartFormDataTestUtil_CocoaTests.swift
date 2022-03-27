@@ -6,11 +6,11 @@ import Cocoa
 
 final class MultipartFormDataParser_CocoaTests: XCTestCase {
 
-    override func setUp() {
+    override class func setUp() {
         stubForUpload()
     }
 
-    override func tearDown() {
+    override class func tearDown() {
         clearStubs()
     }
 
