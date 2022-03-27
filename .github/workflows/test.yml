@@ -21,7 +21,7 @@ jobs:
     runs-on: macos-11
     strategy:
       matrix:
-        xcode: [13.0, 13.1, 13.2.1]
+        xcode: ['13.0', '13.1', '13.2.1']
         destination: 
           - "platform=macOS"
           - "platform=macOS,variant=Mac Catalyst"
