@@ -4,5 +4,15 @@
     "github>hatena/renovate-config"
   ],
   "labels": ["dependencies"],
-  "schedule": ["after 7pm and before 8am on every weekday", "every weekend"]
+  "schedule": ["after 7pm and before 8am on every weekday", "every weekend"],
+  "enabledManagers": [
+    "github-actions",
+    "swift"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["swift"],
+      "extractVersion": "^v?(?<version>.*)"
+    }
+  ]
 }
