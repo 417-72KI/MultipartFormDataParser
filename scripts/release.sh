@@ -57,7 +57,7 @@ EXISTING_RELEASE=$(gh release view --json isDraft,url ${TAG} 2>/dev/null)
 if [ "$EXISTING_RELEASE" != '' ]; then
     if [ "$(echo $EXISTING_RELEASE | jq '.isDraft')" = 'true' ]; then
         UPDATE_URL=$(echo $EXISTING_RELEASE | jq -r '.url')
-        curl -X PATCH \
+        curl -s -X PATCH \
         -H "Authorization: token ${GITHUB_TOKEN}" \
         -d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
         "$UPDATE_URL"
