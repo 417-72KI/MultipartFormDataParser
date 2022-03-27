@@ -20,7 +20,7 @@ jobs:
     name: Test
     runs-on: macos-11
     concurrency: 
-      group: ${{ github.head_ref }}
+      group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
     strategy:
       matrix:
