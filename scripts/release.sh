@@ -52,17 +52,10 @@ else
 fi
 
 # Draft release
-RELEASES_FILE='releases.json'
-curl -X GET \
--H "Authorization: token ${GITHUB_TOKEN}" \
-https://api.github.com/repos/417-72KI/MultipartFormDataParser/releases \
--o $RELEASES_FILE \
-2>/dev/null
-
-EXISTING_RELEASE=$(cat $RELEASES_FILE | jq ".[] | select(contains({tag_name: \"${TAG}\"}))")
+EXISTING_RELEASE=$(gh release view --json isDraft,url ${TAG} 2>/dev/null)
 
 if [ "$EXISTING_RELEASE" != '' ]; then
-    if [ "$(echo $EXISTING_RELEASE | jq '.draft')" = 'true' ]; then
+    if [ "$(echo $EXISTING_RELEASE | jq '.isDraft')" = 'true' ]; then
         UPDATE_URL=$(echo $EXISTING_RELEASE | jq -r '.url')
         curl -X PATCH \
         -H "Authorization: token ${GITHUB_TOKEN}" \
@@ -73,10 +66,5 @@ if [ "$EXISTING_RELEASE" != '' ]; then
         exit 1
     fi
 else
-    curl -X POST \
-    -H "Authorization: token ${GITHUB_TOKEN}" \
-    -d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
-    https://api.github.com/repos/417-72KI/MultipartFormDataParser/releases
+    gh release create ${TAG} --target main --title ${TAG} --generate-notes -d
 fi
-
-rm $RELEASES_FILE
