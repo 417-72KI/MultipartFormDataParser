@@ -66,12 +66,6 @@ stub(condition: condition) { request in
 ```
 
 ## Installation
-### Carthage
-Adding to `Cartfile.private` is recommended.
-```
-github "417-72KI/MultipartFormDataParser"
-```
-
 ### Swift Package Manager
 #### Package.swift
 
@@ -79,4 +73,12 @@ github "417-72KI/MultipartFormDataParser"
 dependencies: [
     .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.4.1")
 ]
+```
+
+### Carthage (deprecated)
+> **Note**: Carthage support will be dropped in future version because it has not been maintained since `0.38.0`.
+
+Adding to `Cartfile.private` is recommended.
+```
+github "417-72KI/MultipartFormDataParser"
 ```
