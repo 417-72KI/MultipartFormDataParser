@@ -19,7 +19,7 @@ let testTargetDependencies: [Target.Dependency] = isRelease
     "Alamofire",
     "APIKit",
     "Moya",
-    "OHHTTPStubsSwift",
+    .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs"),
 ]
 
 let package = Package(
