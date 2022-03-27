@@ -1,19 +1,19 @@
 #!/bin/zsh
 
-set -eo pipefail
+set -o pipefail
 
 cd $(git rev-parse --show-toplevel)
 
 PACKAGE_NAME='MultipartFormDataParser'
 
-CURRENT_BRANCH=$(git branch | grep '* release')
+CURRENT_BRANCH=$(git branch | grep '* release' || true)
 if [ "${CURRENT_BRANCH}" = '' ]; then
-    echo '[Error] this script must be run in release branch.'
+    echo '\e[31m[Error] this script must be run in release branch.\e[m'
     exit 1
 fi
 
 if [ "`git diff --name-only`" != '' ]; then
-    echo '[Error] There are some local changes.'
+    echo '\e[31m[Error] There are some local changes.\e[m'
     exit 1
 fi
 
@@ -22,12 +22,18 @@ TAG=$(cat Sources/MultipartFormDataParser/Info.swift | grep version | awk '{ pri
 # Validate
 README_VERSION=$(cat README.md | grep '.package(url: ' | awk '{ print $NF }' | sed -E 's/\"(.*)\"\)?/\1/')
 if [ "${TAG}" != "${README_VERSION}" ]; then
-    echo '[Error] README.md not updated. Match version in installation.'
+    echo '\e[31m[Error] README.md not updated. Match version in installation.\e[m'
     exit 1
 fi
 
 if [ "$(git fetch --tags && git tag | grep "${TAG}")" != '' ]; then
-    echo "[Error] '${TAG}' tag already exists."
+    echo "\e[31m[Error] '${TAG}' tag already exists.\e[m"
+    exit 1
+fi
+
+IS_RELEASE=$(cat Package.swift | grep 'let isRelease' | awk '{ print $NF }')
+if [ "$IS_RELEASE" != 'true' ]; then
+    echo '\e[31m[Error] `isRelease` flag in Package.swift is false.\e[m'
     exit 1
 fi
 
@@ -42,7 +48,7 @@ if [ "$(git status -s | grep "${PACKAGE_NAME}.xcodeproj/project.pbxproj")" != ''
     git commit -m 'Update xcodeproj' ${PACKAGE_NAME}.xcodeproj/project.pbxproj
     git push origin
 else
-    echo 'No update on xcodeproj.'
+    echo '\e[32m[INFO] No update on xcodeproj.\e[m'
 fi
 
 # Draft release
@@ -63,7 +69,7 @@ if [ "$EXISTING_RELEASE" != '' ]; then
         -d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
         "$UPDATE_URL"
     else
-        echo "[Error] ${TAG} already exists."
+        echo "\e[31m[Error] ${TAG} already exists.\e[m"
         exit 1
     fi
 else
