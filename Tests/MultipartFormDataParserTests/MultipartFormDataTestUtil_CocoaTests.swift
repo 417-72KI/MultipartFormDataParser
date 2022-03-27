@@ -6,11 +6,11 @@ import Cocoa
 
 final class MultipartFormDataParser_CocoaTests: XCTestCase {
 
-    override func setUp() {
+    override class func setUp() {
         stubForUpload()
     }
 
-    override func tearDown() {
+    override class func tearDown() {
         clearStubs()
     }
 
@@ -35,6 +35,17 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 10.15, *)
+    func testAlamofireWithConcurrency() async throws {
+        let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)
+        let denwaNeko = try XCTUnwrap(NSImage(data: TestResource.denwaNeko)?.jpegRepresentation)
+        let message = try XCTUnwrap("Hello world!".data(using: .utf8))
+        let result = try await uploadWithAlamoFireConcurrency(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        XCTAssertEqual(result.status, 200)
+        XCTAssertNil(result.error)
+    }
+    #endif
     #endif
 
     #if canImport(APIKit)
