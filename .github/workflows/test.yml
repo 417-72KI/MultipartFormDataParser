@@ -16,9 +16,12 @@ on:
       - Sources/**/*.swift
       - Tests/**/*.swift
 jobs:
-  big_sur:
-    name: Big Sur
+  test:
+    name: Test
     runs-on: macos-11
+    concurrency: 
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
     strategy:
       matrix:
         xcode: ['13.0', '13.1', '13.2.1']
