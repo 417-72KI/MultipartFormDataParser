@@ -27,6 +27,7 @@ jobs:
           - "platform=macOS,variant=Mac Catalyst"
           - "platform=iOS Simulator,name=iPhone 12 Pro"
           - "platform=tvOS Simulator,name=Apple TV 4K"
+      fail-fast: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
