@@ -16,17 +16,21 @@ on:
       - Sources/**/*.swift
       - Tests/**/*.swift
 jobs:
-  big_sur:
-    name: Big Sur
+  test:
+    name: Test
     runs-on: macos-11
+    concurrency: 
+      group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
+      cancel-in-progress: true
     strategy:
       matrix:
-        xcode: [12.4, 12.5.1, 13.2.1]
+        xcode: ['13.0', '13.1', '13.2.1']
         destination: 
           - "platform=macOS"
           - "platform=macOS,variant=Mac Catalyst"
           - "platform=iOS Simulator,name=iPhone 12 Pro"
           - "platform=tvOS Simulator,name=Apple TV 4K"
+      fail-fast: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:

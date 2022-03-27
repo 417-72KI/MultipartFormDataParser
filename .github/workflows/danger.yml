@@ -9,6 +9,9 @@ jobs:
   danger:
     name: Danger
     runs-on: ubuntu-18.04
+    concurrency: 
+      group: ${{ github.head_ref }}-${{ github.workflow }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
       - name: Danger
