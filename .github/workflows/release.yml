@@ -9,6 +9,9 @@ jobs:
   prepare:
     name: Prepare
     runs-on: macos-11
+    concurrency:
+      group: ${{ github.head_ref }}-${{ github.workflow }}
+      cancel-in-progress: true
     strategy:
       matrix:
         xcode: ['13.2.1']
@@ -21,7 +24,7 @@ jobs:
         with:
           path: |
             .build
-          key: ${{ runner.os }}-xcode${{ matrix.xcode }}-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-xcode${{ matrix.xcode }}-${{ hashFiles('Package.swift') }}
           restore-keys: |
             ${{ runner.os }}-xcode${{ matrix.xcode }}-
       - run: scripts/release.sh
