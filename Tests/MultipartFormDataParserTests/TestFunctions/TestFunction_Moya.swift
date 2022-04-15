@@ -4,6 +4,16 @@ import XCTest
 #if canImport(Moya)
 import Moya
 
+private let provider: MoyaProvider<TestTarget> = {
+    #if canImport(OHHTTPStubs)
+    return MoyaProvider()
+    #else
+    let configuration = URLSessionConfiguration.ephemeral
+    configuration.protocolClasses = [StubURLProtocol.self]
+    return MoyaProvider(session: Session(configuration: configuration))
+    #endif
+}()
+
 extension XCTestCase {
     func uploadWithMoya(
         genbaNeko: Data,
@@ -23,7 +33,7 @@ extension XCTestCase {
             line: line
         )
         var result: Result<Response, MoyaError>!
-        MoyaProvider().request(target) {
+        provider.request(target) {
             result = $0
             exp.fulfill()
         }
