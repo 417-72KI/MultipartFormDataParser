@@ -35,7 +35,7 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
-    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    #if compiler(>=5.6) && canImport(_Concurrency)
     @available(macOS 10.15, *)
     func testAlamofireWithConcurrency() async throws {
         let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)

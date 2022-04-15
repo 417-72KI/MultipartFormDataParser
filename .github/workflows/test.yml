@@ -18,13 +18,13 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: macos-11
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
     strategy:
       matrix:
-        xcode: ['13.0', '13.1', '13.2.1']
+        xcode: ['13.2.1']
         destination: 
           - "platform=macOS"
           - "platform=macOS,variant=Mac Catalyst"

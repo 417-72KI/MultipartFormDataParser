@@ -36,7 +36,7 @@ final class MultipartFormDataParser_UIKitTests: XCTestCase {
         XCTAssertNil(result.error)
     }
 
-    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    #if compiler(>=5.6) && canImport(_Concurrency)
     @available(macCatalyst 13, iOS 13, tvOS 13, *)
     func testAlamofireWithConcurrency() async throws {
         let genbaNeko = try XCTUnwrap(UIImage(data: TestResource.genbaNeko)?.jpegData(compressionQuality: 1))
