@@ -4,6 +4,17 @@ import XCTest
 #if canImport(APIKit)
 import APIKit
 
+private let session: Session = {
+    #if canImport(OHHTTPStubs)
+    return .shared
+    #else
+    let configuration = URLSessionConfiguration.default
+    configuration.protocolClasses = [StubURLProtocol.self]
+    let adapter = URLSessionAdapter(configuration: configuration)
+    return Session(adapter: adapter)
+    #endif
+}()
+
 extension XCTestCase {
     func requestWithAPIKit(
         genbaNeko: Data,
@@ -37,7 +48,7 @@ extension XCTestCase {
             line: line
         )
         var result: Result<TestRequest.Response, SessionTaskError>!
-        Session.shared.send(request, callbackQueue: nil) {
+        session.send(request, callbackQueue: nil) {
             result = $0
             exp.fulfill()
         }
