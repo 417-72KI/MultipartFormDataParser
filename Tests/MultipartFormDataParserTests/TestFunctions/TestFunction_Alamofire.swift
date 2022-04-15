@@ -4,6 +4,16 @@ import XCTest
 #if canImport(Alamofire)
 import Alamofire
 
+private let session: Session = {
+    #if canImport(OHHTTPStubs)
+    return AF
+    #else
+    let configuration = URLSessionConfiguration.ephemeral
+    configuration.protocolClasses = [StubURLProtocol.self]
+    return Session(configuration: configuration)
+    #endif
+}()
+
 extension XCTestCase {
     func uploadWithAlamoFire(
         genbaNeko: Data,
@@ -14,7 +24,7 @@ extension XCTestCase {
         line: UInt = #line
     ) throws -> TestEntity? {
         let exp = expectation(description: "response")
-        let task = AF.upload(
+        let task = session.upload(
             multipartFormData: { formData in
                 formData.append(
                     genbaNeko,
@@ -63,7 +73,7 @@ extension XCTestCase {
     ) async throws -> TestEntity {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try await AF.upload(
+        return try await session.upload(
             multipartFormData: { formData in
                 formData.append(
                     genbaNeko,
