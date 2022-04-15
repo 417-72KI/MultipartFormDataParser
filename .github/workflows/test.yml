@@ -81,5 +81,6 @@ jobs:
         with:
           path: test_output/TestResults.xcresult
           show-passed-tests: false
+          show-code-coverage: false
           upload-bundles: false
 
