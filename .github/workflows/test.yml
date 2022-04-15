@@ -35,20 +35,18 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
       - uses: actions/checkout@v3
-      - id: create_destination_key
+      - id: create-destination-key
         name: Create destination key for cache
         run: echo "::set-output name=destination_key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
       - uses: actions/cache@v3
         with:
           path: |
             .build/SourcePackages/checkouts
-          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-${{ hashFiles('Package.swift') }}
+          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination_key }}-${{ hashFiles('Package.swift') }}
           restore-keys: |
-            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-
+            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination_key }}-
       - name: test
-        run: | 
-          platform=$(echo '${{ matrix.destination }}' | sed -E 's/platform=(.*)(,name=.*)/\1/g' | tr ' ' '_')
-          echo "::set-output name=platform::$platform"
+        run: |
           defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
           set -o pipefail && \
           rm -rf 'MultipartFormDataParser.xcodeproj' && \
@@ -63,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
-          name: ${{ steps.test.outputs.platform }}
+          name: ${{ steps.create-destination-key.outputs.destination_key }}
           path: test_output
           if-no-files-found: error
           retention-days: 7
