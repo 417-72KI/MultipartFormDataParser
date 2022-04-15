@@ -27,15 +27,12 @@ func stubForUpload() {
     stub(condition: condition, response: uploadTestStubResponse)
     #else
     StubURLProtocol.requestHandler = uploadTestStubResponse
-    URLProtocol.registerClass(StubURLProtocol.self)
     #endif
 }
 
 func clearStubs() {
     #if canImport(OHHTTPStubs)
     HTTPStubs.removeAllStubs()
-    #else
-    URLProtocol.unregisterClass(StubURLProtocol.self)
     #endif
 }
 
