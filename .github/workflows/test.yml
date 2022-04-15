@@ -18,7 +18,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: macos-11
+    runs-on: macos-latest
     concurrency: 
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
