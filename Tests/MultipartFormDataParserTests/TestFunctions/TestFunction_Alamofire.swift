@@ -33,8 +33,11 @@ extension XCTestCase {
             to: "https://localhost/upload",
             interceptor: Interceptor()
         )
-        var response: AFDataResponse<Any>!
-        task.responseJSON {
+        var response: AFDataResponse<TestEntity>!
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        task.responseDecodable(of: TestEntity.self,
+                               decoder: decoder) {
             response = $0
             exp.fulfill()
         }
@@ -42,10 +45,10 @@ extension XCTestCase {
 
         XCTAssertNotNil(response, file: file, line: line)
         XCTAssertEqual(response?.response?.statusCode, 200, file: file, line: line)
-
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        return try decoder.decode(TestEntity.self, from: try XCTUnwrap(response?.data))
+        switch response.result {
+        case let .success(entity): return entity
+        case let .failure(error): throw error
+        }
     }
 
     #if compiler(>=5.6) && canImport(_Concurrency)
