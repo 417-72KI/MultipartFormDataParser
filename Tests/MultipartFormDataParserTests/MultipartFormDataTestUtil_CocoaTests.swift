@@ -84,7 +84,6 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
     }
     #endif
 
-    #if canImport(OHHTTPStubs)
     func testURLSessionDataTask() throws {
         let genbaNeko = try XCTUnwrap(NSImage(data: TestResource.genbaNeko)?.jpegRepresentation)
         let denwaNeko = try XCTUnwrap(NSImage(data: TestResource.denwaNeko)?.jpegRepresentation)
@@ -102,6 +101,5 @@ final class MultipartFormDataParser_CocoaTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
-    #endif
 }
 #endif
