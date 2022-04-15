@@ -24,7 +24,7 @@ jobs:
       cancel-in-progress: true
     strategy:
       matrix:
-        xcode: ['13.0', '13.1', '13.2.1']
+        xcode: ['13.2.1']
         destination: 
           - "platform=macOS"
           - "platform=macOS,variant=Mac Catalyst"
