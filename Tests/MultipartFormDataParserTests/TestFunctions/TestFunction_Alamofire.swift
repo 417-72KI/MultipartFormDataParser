@@ -48,7 +48,7 @@ extension XCTestCase {
         return try decoder.decode(TestEntity.self, from: try XCTUnwrap(response?.data))
     }
 
-    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    #if compiler(>=5.6) && canImport(_Concurrency)
     @available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, *)
     func uploadWithAlamoFireConcurrency(
         genbaNeko: Data,
