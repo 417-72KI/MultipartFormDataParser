@@ -1,30 +1,38 @@
 name: Test
 on:
-  push:
-    branches: 
-      - main
-      - hotfix
-    paths:
-      - .github/workflows/test.yml
-      - Package.*
-      - Sources/**/*.swift
-      - Tests/**/*.swift
   pull_request:
     paths:
       - .github/workflows/test.yml
       - Package.*
       - Sources/**/*.swift
       - Tests/**/*.swift
+      - .github/matrix.json
+concurrency: 
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
 jobs:
+  xcode-versions:
+    name: Extract latest Xcode version from matrix
+    runs-on: ubuntu-latest
+    outputs:
+      xcode-versions: ${{ steps.extract-xcode-version.outputs.xcode-versions }}
+      latest: ${{ steps.extract-xcode-version.outputs.latest-xcode-version }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: extract-xcode-version
+        run: |
+          echo "::set-output name=xcode-versions::$(cat .github/matrix.json | jq -rc '.xcode_version')"
+          echo "::set-output name=latest-xcode-version::$(cat .github/matrix.json | jq -r '.xcode_version | max')"
   test:
     name: Test
+    needs: xcode-versions
     runs-on: macos-latest
     concurrency: 
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
     strategy:
       matrix:
-        xcode: ['13.2.1']
+        xcode: ${{ fromJson(needs.xcode-versions.outputs.xcode-versions) }}
         destination: 
           - "platform=macOS"
           - "platform=macOS,variant=Mac Catalyst"
@@ -35,18 +43,19 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
       - uses: actions/checkout@v3
-      - id: create_destination_key
+      - id: create-destination-key
         name: Create destination key for cache
-        run: echo "::set-output name=destination_key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
+        run: echo "::set-output name=destination-key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
       - uses: actions/cache@v3
         with:
           path: |
             .build/SourcePackages/checkouts
-          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-${{ hashFiles('Package.swift') }}
+          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-${{ hashFiles('Package.swift') }}
           restore-keys: |
-            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create_destination_key.outputs.destination_key }}-
+            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-
       - name: test
-        run: | 
+        run: |
+          defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
           set -o pipefail && \
           rm -rf 'MultipartFormDataParser.xcodeproj' && \
           xcrun xcodebuild \
@@ -54,4 +63,32 @@ jobs:
           -scheme MultipartFormDataParser \
           -destination "${{ matrix.destination }}" \
           -derivedDataPath '.build' \
+          -resultBundlePath 'test_output/TestResult.xcresult' \
           clean test | xcpretty
+      - name: Upload test result
+        uses: actions/upload-artifact@v3
+        if: ${{ matrix.xcode }} == ${{ needs.xcode-versions.outputs.latest }} && (success() || failure())
+        with:
+          name: ${{ steps.create-destination-key.outputs.destination-key }}
+          path: test_output
+          if-no-files-found: error
+          retention-days: 1
+  xcodebuild_result:
+    name: Export xcodebuild test result
+    needs: test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: test_output
+      - name: Merge xcresult files
+        run:
+          xcrun xcresulttool merge test_output/**/*.xcresult --output-path test_output/TestResults.xcresult
+      - uses: kishikawakatsumi/xcresulttool@v1
+        if: success() || failure()
+        with:
+          path: test_output/TestResults.xcresult
+          show-passed-tests: false
+          show-code-coverage: false
+          upload-bundles: true
+
