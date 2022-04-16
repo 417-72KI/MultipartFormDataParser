@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let isRelease = true
+let isRelease = false
 
 let testDependencies: [Package.Dependency] = isRelease
 ? []
