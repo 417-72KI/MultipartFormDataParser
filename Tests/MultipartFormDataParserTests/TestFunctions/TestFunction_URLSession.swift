@@ -1,7 +1,16 @@
 import Foundation
 import XCTest
 
-#if canImport(OHHTTPStubs)
+private let session: URLSession = {
+    #if canImport(OHHTTPStubs)
+    return .shared
+    #else
+    let configuration = URLSessionConfiguration.ephemeral
+    configuration.protocolClasses = [StubURLProtocol.self]
+    return URLSession(configuration: configuration)
+    #endif
+}()
+
 extension XCTestCase {
     func uploadURLSessionDataTask(
         genbaNeko: Data,
@@ -15,13 +24,16 @@ extension XCTestCase {
 
         let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
         var responseData: Data!
-        URLSession.shared.dataTask(with: request) { data, _, _ in
+        session.dataTask(with: request) { data, _, _ in
             responseData = data
             exp.fulfill()
         }.resume()
         waitForExpectations(timeout: timeoutInterval)
 
         guard let data = responseData else {
+            guard retryCount > 0 else {
+                throw URLError(.fileDoesNotExist)
+            }
             return try uploadURLSessionDataTask(genbaNeko: genbaNeko,
                                                 denwaNeko: denwaNeko,
                                                 message: message,
@@ -52,12 +64,15 @@ extension XCTestCase {
                                      denwaNeko: denwaNeko,
                                      message: message)
         var responseData: Data!
-        URLSession.shared.uploadTask(with: request, from: requestBody) { data, _, _ in
+        session.uploadTask(with: request, from: requestBody) { data, _, _ in
             responseData = data
             exp.fulfill()
         }.resume()
         waitForExpectations(timeout: timeoutInterval)
         guard let data = responseData else {
+            guard retryCount > 0 else {
+                throw URLError(.fileDoesNotExist)
+            }
             return try uploadURLSessionUploadTask(genbaNeko: genbaNeko,
                                                   denwaNeko: denwaNeko,
                                                   message: message,
@@ -68,7 +83,6 @@ extension XCTestCase {
         return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 }
-#endif
 
 extension XCTestCase {
     func createRequest(
