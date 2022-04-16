@@ -71,7 +71,7 @@ stub(condition: condition) { request in
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.4.2")
+    .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.4.3")
 ]
 ```
 
