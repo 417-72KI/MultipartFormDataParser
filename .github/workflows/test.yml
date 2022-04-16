@@ -37,14 +37,14 @@ jobs:
       - uses: actions/checkout@v3
       - id: create-destination-key
         name: Create destination key for cache
-        run: echo "::set-output name=destination_key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
+        run: echo "::set-output name=destination-key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
       - uses: actions/cache@v3
         with:
           path: |
             .build/SourcePackages/checkouts
-          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination_key }}-${{ hashFiles('Package.swift') }}
+          key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-${{ hashFiles('Package.swift') }}
           restore-keys: |
-            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination_key }}-
+            ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-
       - name: test
         run: |
           defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
@@ -61,10 +61,10 @@ jobs:
         uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
-          name: ${{ steps.create-destination-key.outputs.destination_key }}
+          name: ${{ steps.create-destination-key.outputs.destination-key }}
           path: test_output
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
   xcodebuild_result:
     name: Export xcodebuild test result
     needs: test
@@ -82,5 +82,5 @@ jobs:
           path: test_output/TestResults.xcresult
           show-passed-tests: false
           show-code-coverage: false
-          upload-bundles: false
+          upload-bundles: true
 
