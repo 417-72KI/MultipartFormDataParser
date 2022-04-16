@@ -74,11 +74,3 @@ dependencies: [
     .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.4.3")
 ]
 ```
-
-### Carthage (deprecated)
-> **Note**: Carthage support will be dropped in future version because it has not been maintained since `0.38.0`.
-
-Adding to `Cartfile.private` is recommended.
-```
-github "417-72KI/MultipartFormDataParser"
-```

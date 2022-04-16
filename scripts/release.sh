@@ -37,20 +37,6 @@ if [ "$IS_RELEASE" != 'true' ]; then
     exit 1
 fi
 
-# Generate xcodeproj
-swift package generate-xcodeproj
-
-# commit
-if [ "$(git status -s | grep "${PACKAGE_NAME}.xcodeproj/project.pbxproj")" != '' ]; then
-    git config advice.addIgnoredFile false
-    git config user.name github-actions
-    git config user.email github-actions@github.com
-    git commit -m 'Update xcodeproj' ${PACKAGE_NAME}.xcodeproj/project.pbxproj
-    git push origin
-else
-    echo '\e[32m[INFO] No update on xcodeproj.\e[m'
-fi
-
 # Draft release
 EXISTING_RELEASE=$(gh release view --json isDraft,url ${TAG} 2>/dev/null)
 
