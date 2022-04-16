@@ -52,8 +52,13 @@ if [ $DEBUG -ne 0 ]; then
 fi
 
 git commit $COMMIT_OPTION -m "Bump version to ${TAG}" Package.swift Makefile README.md
-
 if [ $DEBUG -eq 0 ]; then
     git push origin main
     gh release create ${TAG} --target main --title ${TAG} --generate-notes
+fi
+
+sed -i '' -E "s/(let isRelease = )(true|false)/\1false/" Package.swift
+git commit $COMMIT_OPTION -m 'switch release flag to false' Package.swift
+if [ $DEBUG -eq 0 ]; then
+    git push origin main
 fi
