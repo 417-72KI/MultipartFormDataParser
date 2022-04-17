@@ -1,56 +1,83 @@
 #!/bin/zsh
 
-set -o pipefail
+set -eu
+
+PROJECT_NAME=$1
+TAG=$2
+
+DEBUG=0
+
+if ! type "gh" > /dev/null; then
+    echo '\e[33m`gh` not found. Install\e[m'
+    brew install gh
+fi
 
 cd $(git rev-parse --show-toplevel)
 
-PACKAGE_NAME='MultipartFormDataParser'
+if [ `git symbolic-ref --short HEAD` != 'main' ]; then
+    echo '\e[33mRelease job is enabled only in main. Run in debug mode\e[m'
+    DEBUG=1
+fi
 
-CURRENT_BRANCH=$(git branch | grep '* release' || true)
-if [ "${CURRENT_BRANCH}" = '' ]; then
-    echo '\e[31m[Error] this script must be run in release branch.\e[m'
+echo "${TAG}" | grep -wE '([0-9]+)\.([0-9]+)\.([0-9]+)' > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Invalid version format: \"${TAG}\""
     exit 1
 fi
 
-if [ "`git diff --name-only`" != '' ]; then
+LOCAL_CHANGES=`git diff --name-only HEAD`
+if [ "$LOCAL_CHANGES" = 'Makefile' ]; then
+    MAKEFILE_DIFF="$(git diff -U0 Makefile | grep '^[+-]' | grep -Ev '^(--- a/|\+\+\+ b/)')"
+    if [ "$(echo $MAKEFILE_DIFF | grep -Ev '^[+-]ver = [0-9]*\.[0-9]*\.[0-9]*$')" != '' ]; then
+        echo '\e[31m[Error] There are some local changes.\e[m'
+        exit 1
+    fi
+elif [ "$LOCAL_CHANGES" != '' ]; then
     echo '\e[31m[Error] There are some local changes.\e[m'
     exit 1
 fi
 
-TAG=$(cat Sources/MultipartFormDataParser/Info.swift | grep version | awk '{ print $NF }' | sed -E 's/\"(.*)\"/\1/')
-
 # Validate
-README_VERSION=$(cat README.md | grep '.package(url: ' | awk '{ print $NF }' | sed -E 's/\"(.*)\"\)?/\1/')
-if [ "${TAG}" != "${README_VERSION}" ]; then
-    echo '\e[31m[Error] README.md not updated. Match version in installation.\e[m'
-    exit 1
-fi
-
 if [ "$(git fetch --tags && git tag | grep "${TAG}")" != '' ]; then
     echo "\e[31m[Error] '${TAG}' tag already exists.\e[m"
     exit 1
 fi
 
-IS_RELEASE=$(cat Package.swift | grep 'let isRelease' | awk '{ print $NF }')
-if [ "$IS_RELEASE" != 'true' ]; then
-    echo '\e[31m[Error] `isRelease` flag in Package.swift is false.\e[m'
-    exit 1
+sed -i '' -E "s/(\.package\(url: \".*${PROJECT_NAME}\.git\", from: \").*(\"\),?)/\1${TAG}\2/g" README.md
+sed -i '' -E "s/(let isRelease = )(true|false)/\1true/" Package.swift
+
+# Podspec
+MAC_OS_VERSION="$(cat Package.swift | grep '.macOS(.v' | sed -E "s/ *\.macOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
+if [[ "$MAC_OS_VERSION" != *"."* ]]; then
+    MAC_OS_VERSION="${MAC_OS_VERSION}.0"
+fi
+IOS_VERSION="$(cat Package.swift | grep '.iOS(.v' | sed -E "s/ *\.iOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
+if [[ "$IOS_VERSION" != *"."* ]]; then
+    IOS_VERSION="${IOS_VERSION}.0"
+fi
+TV_OS_VERSION="$(cat Package.swift | grep '.tvOS(.v' | sed -E "s/ *\.tvOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
+if [[ "$TV_OS_VERSION" != *"."* ]]; then
+    TV_OS_VERSION="${TV_OS_VERSION}.0"
 fi
 
-# Draft release
-EXISTING_RELEASE=$(gh release view --json isDraft,url ${TAG} 2>/dev/null)
+sed -i '' -E "s/(spec\.version *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${TAG}\"/g" ${PROJECT_NAME}.podspec
+sed -i '' -E "s/(spec\.osx\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${MAC_OS_VERSION}\"/g" ${PROJECT_NAME}.podspec
+sed -i '' -E "s/(spec\.ios\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${IOS_VERSION}\"/g" ${PROJECT_NAME}.podspec
+sed -i '' -E "s/(spec\.tvos\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${TV_OS_VERSION}\"/g" ${PROJECT_NAME}.podspec
 
-if [ "$EXISTING_RELEASE" != '' ]; then
-    if [ "$(echo $EXISTING_RELEASE | jq '.isDraft')" = 'true' ]; then
-        UPDATE_URL=$(echo $EXISTING_RELEASE | jq -r '.url')
-        curl -s -X PATCH \
-        -H "Authorization: token ${GITHUB_TOKEN}" \
-        -d "{\"tag_name\": \"${TAG}\", \"target_commitish\": \"main\", \"name\": \"${TAG}\", \"draft\": true}" \
-        "$UPDATE_URL"
-    else
-        echo "\e[31m[Error] ${TAG} already exists.\e[m"
-        exit 1
-    fi
-else
-    gh release create ${TAG} --target main --title ${TAG} --generate-notes -d
+COMMIT_OPTION=''
+if [ $DEBUG -ne 0 ]; then
+    COMMIT_OPTION='--dry-run'
+fi
+
+git commit $COMMIT_OPTION -m "Bump version to ${TAG}" Package.swift Makefile README.md "${PROJECT_NAME}.podspec"
+if [ $DEBUG -eq 0 ]; then
+    git push origin main
+    gh release create ${TAG} --target main --title ${TAG} --generate-notes
+fi
+
+sed -i '' -E "s/(let isRelease = )(true|false)/\1false/" Package.swift
+git commit $COMMIT_OPTION -m 'switch release flag to false' Package.swift
+if [ $DEBUG -eq 0 ]; then
+    git push origin main
 fi
