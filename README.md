@@ -1,8 +1,7 @@
 # MultipartFormDataParser
-[![Actions Status](https://github.com/417-72KI/MultipartFormDataParser/workflows/Test/badge.svg)](https://github.com/417-72KI/MultipartFormDataParser/actions)<!-- CocoaPods future support
+[![Actions Status](https://github.com/417-72KI/MultipartFormDataParser/workflows/Test/badge.svg)](https://github.com/417-72KI/MultipartFormDataParser/actions)
 [![Version](http://img.shields.io/cocoapods/v/MultipartFormDataParser.svg?style=flat)](http://cocoapods.org/pods/MultipartFormDataParser)
 [![Platform](http://img.shields.io/cocoapods/p/MultipartFormDataParser.svg?style=flat)](http://cocoapods.org/pods/MultipartFormDataParser)
--->
 [![GitHub release](https://img.shields.io/github/release/417-72KI/MultipartFormDataParser/all.svg)](https://github.com/417-72KI/MultipartFormDataParser/releases)
 [![Swift Package Manager](https://img.shields.io/badge/Swift%20Package%20Manager-5.5-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -66,11 +65,18 @@ stub(condition: condition) { request in
 ```
 
 ## Installation
-### Swift Package Manager
+### Swift Package Manager (recommended)
 #### Package.swift
 
 ```swift
 dependencies: [
     .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "1.4.3")
 ]
+```
+
+### CocoaPods
+#### Podfile
+
+```ruby
+pod 'MultipartFormDataParser'
 ```
