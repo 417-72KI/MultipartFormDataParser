@@ -46,12 +46,31 @@ fi
 sed -i '' -E "s/(\.package\(url: \".*${PROJECT_NAME}\.git\", from: \").*(\"\),?)/\1${TAG}\2/g" README.md
 sed -i '' -E "s/(let isRelease = )(true|false)/\1true/" Package.swift
 
+# Podspec
+MAC_OS_VERSION="$(cat Package.swift | grep '.macOS(.v' | sed -E "s/ *\.macOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
+if [[ "$MAC_OS_VERSION" != *"."* ]]; then
+    MAC_OS_VERSION="${MAC_OS_VERSION}.0"
+fi
+IOS_VERSION="$(cat Package.swift | grep '.iOS(.v' | sed -E "s/ *\.iOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
+if [[ "$IOS_VERSION" != *"."* ]]; then
+    IOS_VERSION="${IOS_VERSION}.0"
+fi
+TV_OS_VERSION="$(cat Package.swift | grep '.tvOS(.v' | sed -E "s/ *\.tvOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
+if [[ "$TV_OS_VERSION" != *"."* ]]; then
+    TV_OS_VERSION="${TV_OS_VERSION}.0"
+fi
+
+sed -i '' -E "s/(spec\.version *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${TAG}\"/g" ${PROJECT_NAME}.podspec
+sed -i '' -E "s/(spec\.osx\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${MAC_OS_VERSION}\"/g" ${PROJECT_NAME}.podspec
+sed -i '' -E "s/(spec\.ios\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${IOS_VERSION}\"/g" ${PROJECT_NAME}.podspec
+sed -i '' -E "s/(spec\.tvos\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/\1\"${TV_OS_VERSION}\"/g" ${PROJECT_NAME}.podspec
+
 COMMIT_OPTION=''
 if [ $DEBUG -ne 0 ]; then
     COMMIT_OPTION='--dry-run'
 fi
 
-git commit $COMMIT_OPTION -m "Bump version to ${TAG}" Package.swift Makefile README.md
+git commit $COMMIT_OPTION -m "Bump version to ${TAG}" Package.swift Makefile README.md "${PROJECT_NAME}.podspec"
 if [ $DEBUG -eq 0 ]; then
     git push origin main
     gh release create ${TAG} --target main --title ${TAG} --generate-notes
