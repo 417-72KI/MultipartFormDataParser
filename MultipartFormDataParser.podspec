@@ -4,8 +4,9 @@ Pod::Spec.new do |spec|
     spec.summary      = "Mocking UserDefaults for tests"
         
     spec.description  = <<-DESC
-                    MultipartFormDataParser is a testing tool for `multipart/form-data` request in Swift.
-                    DESC
+                        MultipartFormDataParser is a testing tool for `multipart/form-data` request in Swift.
+                        This library provides a parser for `multipart/form-data` request to test it briefly.
+                        DESC
     
     spec.homepage     = "https://github.com/417-72KI/#{spec.name}"
     spec.readme       = "https://github.com/417-72KI/#{spec.name}/blob/#{spec.version}/README.md"
