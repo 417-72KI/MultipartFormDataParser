@@ -1,6 +1,6 @@
 import Foundation
 
-public enum MultipartFormDataError: Error {
+public enum MultipartFormDataError: LocalizedError {
     case noContentType
     case invalidContentType(String)
     case httpBodyStreamEmpty
@@ -11,7 +11,7 @@ public enum MultipartFormDataError: Error {
 }
 
 extension MultipartFormDataError {
-    public var localizedDescription: String {
+    public var errorDescription: String? {
         switch self {
         case .noContentType: return "No Content-Type"
         case let .invalidContentType(contentType): return "Invalid Content-Type: \(contentType)"
