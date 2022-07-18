@@ -111,6 +111,8 @@ private extension MultipartFormDataParserTests {
         #elseif canImport(Cocoa)
         return NSImage(data: TestResource.genbaNeko)?
             .jpegRepresentation
+        #elseif os(Linux)
+        return Image(data: TestResource.genbaNeko)?.data
         #else
         return TestResource.genbaNeko
         #endif
@@ -123,6 +125,8 @@ private extension MultipartFormDataParserTests {
         #elseif canImport(Cocoa)
         return NSImage(data: TestResource.denwaNeko)?
             .jpegRepresentation
+        #elseif os(Linux)
+        return Image(data: TestResource.denwaNeko)?.data
         #else
         return TestResource.denwaNeko
         #endif
