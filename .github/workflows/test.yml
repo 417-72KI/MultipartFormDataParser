@@ -26,7 +26,7 @@ jobs:
   test:
     name: Test
     needs: xcode-versions
-    runs-on: macos-latest
+    runs-on: macos-12
     concurrency: 
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
@@ -76,7 +76,7 @@ jobs:
   xcodebuild_result:
     name: Export xcodebuild test result
     needs: test
-    runs-on: macOS-latest
+    runs-on: macOS-12
     steps:
       - uses: actions/download-artifact@v3
         with:
