@@ -55,7 +55,6 @@ extension MultipartFormData.Element {
                 element.mimeType = mimeType
                 continue
             }
-            print(string)
             if element.data.isEmpty {
                 element.data = line
             }
