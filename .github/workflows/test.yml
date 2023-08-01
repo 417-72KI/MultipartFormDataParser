@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "xcode-versions=$(cat .github/matrix.json | jq -rc '.xcode_version')" >> $GITHUB_OUTPUT
           echo "latest-xcode-version=$(cat .github/matrix.json | jq -r '.xcode_version | max')" >> $GITHUB_OUTPUT
-  test:
+  test-macos:
     name: Test
     needs: xcode-versions
     runs-on: macos-13
@@ -75,7 +75,7 @@ jobs:
           retention-days: 1
   xcodebuild_result:
     name: Export xcodebuild test result
-    needs: test
+    needs: test-macos
     runs-on: macOS-13
     steps:
       - uses: actions/download-artifact@v3
