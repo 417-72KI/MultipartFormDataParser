@@ -38,8 +38,6 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertNil(result.error)
     }
 
-    #if compiler(>=5.6) && canImport(_Concurrency)
-    @available(macCatalyst 13, iOS 13, tvOS 13, *)
     func testAlamofireWithConcurrency() async throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
@@ -48,7 +46,6 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
-    #endif
     #endif
 
     #if canImport(APIKit)
@@ -95,7 +92,7 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
-    
+
     func testURLSessionDataTask() async throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
