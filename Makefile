@@ -1,6 +1,6 @@
 PROJECT_NAME = MultipartFormDataParser
 
-ver = 2.0.0
+ver = 2.0.1
 
 .SILENT:
 
