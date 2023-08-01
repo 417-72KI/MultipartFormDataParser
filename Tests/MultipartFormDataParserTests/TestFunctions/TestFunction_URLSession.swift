@@ -19,30 +19,20 @@ extension XCTestCase {
         retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
-    ) throws -> TestEntity? {
-        let exp = expectation(description: "response")
-
+    ) async throws -> TestEntity {
         let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
-        var responseData: Data!
-        session.dataTask(with: request) { data, _, _ in
-            responseData = data
-            exp.fulfill()
-        }.resume()
-        waitForExpectations(timeout: timeoutInterval)
-
-        guard let data = responseData else {
-            guard retryCount > 0 else {
-                throw URLError(.fileDoesNotExist)
-            }
-            return try uploadURLSessionDataTask(genbaNeko: genbaNeko,
-                                                denwaNeko: denwaNeko,
-                                                message: message,
-                                                retryCount: retryCount - 1,
-                                                file: file,
-                                                line: line)
+        do {
+            let (data, _) = try await session.data(for: request)
+            return try JSONDecoder().decode(TestEntity.self, from: data)
+        } catch {
+            guard retryCount > 0 else { throw error }
+            return try await uploadURLSessionDataTask(genbaNeko: genbaNeko,
+                                                      denwaNeko: denwaNeko,
+                                                      message: message,
+                                                      retryCount: retryCount - 1,
+                                                      file: file,
+                                                      line: line)
         }
-
-        return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 
     func uploadURLSessionUploadTask(
@@ -52,9 +42,7 @@ extension XCTestCase {
         retryCount: UInt = 3,
         file: StaticString = #file,
         line: UInt = #line
-    ) throws -> TestEntity? {
-        let exp = expectation(description: "response")
-
+    ) async throws -> TestEntity {
         let boundary = "YoWatanabe0417"
         var request = URLRequest(url: URL(string: "https://localhost/upload")!)
         request.httpMethod = "POST"
@@ -63,24 +51,18 @@ extension XCTestCase {
                                      genbaNeko: genbaNeko,
                                      denwaNeko: denwaNeko,
                                      message: message)
-        var responseData: Data!
-        session.uploadTask(with: request, from: requestBody) { data, _, _ in
-            responseData = data
-            exp.fulfill()
-        }.resume()
-        waitForExpectations(timeout: timeoutInterval)
-        guard let data = responseData else {
-            guard retryCount > 0 else {
-                throw URLError(.fileDoesNotExist)
-            }
-            return try uploadURLSessionUploadTask(genbaNeko: genbaNeko,
-                                                  denwaNeko: denwaNeko,
-                                                  message: message,
-                                                  retryCount: retryCount - 1,
-                                                  file: file,
-                                                  line: line)
+        do {
+            let (data, _) = try await session.upload(for: request, from: requestBody)
+            return try JSONDecoder().decode(TestEntity.self, from: data)
+        } catch {
+            guard retryCount > 0 else { throw error }
+            return try await uploadURLSessionUploadTask(genbaNeko: genbaNeko,
+                                                        denwaNeko: denwaNeko,
+                                                        message: message,
+                                                        retryCount: retryCount - 1,
+                                                        file: file,
+                                                        line: line)
         }
-        return try JSONDecoder().decode(TestEntity.self, from: data)
     }
 }
 
