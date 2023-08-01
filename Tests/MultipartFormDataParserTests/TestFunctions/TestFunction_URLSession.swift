@@ -12,7 +12,7 @@ private let session: URLSession = {
 }()
 
 extension XCTestCase {
-    func uploadURLSessionDataTask(
+    func uploadURLSessionData(
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
@@ -26,16 +26,16 @@ extension XCTestCase {
             return try JSONDecoder().decode(TestEntity.self, from: data)
         } catch {
             guard retryCount > 0 else { throw error }
-            return try await uploadURLSessionDataTask(genbaNeko: genbaNeko,
-                                                      denwaNeko: denwaNeko,
-                                                      message: message,
-                                                      retryCount: retryCount - 1,
-                                                      file: file,
-                                                      line: line)
+            return try await uploadURLSessionData(genbaNeko: genbaNeko,
+                                                  denwaNeko: denwaNeko,
+                                                  message: message,
+                                                  retryCount: retryCount - 1,
+                                                  file: file,
+                                                  line: line)
         }
     }
 
-    func uploadURLSessionUploadTask(
+    func uploadURLSessionUpload(
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
@@ -56,12 +56,12 @@ extension XCTestCase {
             return try JSONDecoder().decode(TestEntity.self, from: data)
         } catch {
             guard retryCount > 0 else { throw error }
-            return try await uploadURLSessionUploadTask(genbaNeko: genbaNeko,
-                                                        denwaNeko: denwaNeko,
-                                                        message: message,
-                                                        retryCount: retryCount - 1,
-                                                        file: file,
-                                                        line: line)
+            return try await uploadURLSessionUpload(genbaNeko: genbaNeko,
+                                                    denwaNeko: denwaNeko,
+                                                    message: message,
+                                                    retryCount: retryCount - 1,
+                                                    file: file,
+                                                    line: line)
         }
     }
 }
