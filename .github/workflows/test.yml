@@ -21,8 +21,8 @@ jobs:
       - uses: actions/checkout@v3
       - id: extract-xcode-version
         run: |
-          echo "::set-output name=xcode-versions::$(cat .github/matrix.json | jq -rc '.xcode_version')"
-          echo "::set-output name=latest-xcode-version::$(cat .github/matrix.json | jq -r '.xcode_version | max')"
+          echo "xcode-versions=$(cat .github/matrix.json | jq -rc '.xcode_version')" >> $GITHUB_OUTPUT
+          echo "latest-xcode-version=$(cat .github/matrix.json | jq -r '.xcode_version | max')" >> $GITHUB_OUTPUT
   test:
     name: Test
     needs: xcode-versions
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v3
       - id: create-destination-key
         name: Create destination key for cache
-        run: echo "::set-output name=destination-key::$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')"
+        run: echo "destination-key=$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')" >> $GITHUB_OUTPUT
       - uses: actions/cache@v3
         with:
           path: |
