@@ -24,6 +24,7 @@ let package = Package(
     name: "MultipartFormDataParser",
     platforms: [
         .macOS(.v12),
+        .macCatalyst(.v15),
         .iOS(.v15),
         .tvOS(.v15)
     ],
