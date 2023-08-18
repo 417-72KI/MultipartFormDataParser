@@ -112,7 +112,7 @@ private extension MultipartFormDataParserTests {
         return NSImage(data: TestResource.genbaNeko)?
             .jpegRepresentation
         #else
-        fatalError()
+        return TestResource.genbaNeko
         #endif
     }
 
@@ -124,7 +124,7 @@ private extension MultipartFormDataParserTests {
         return NSImage(data: TestResource.denwaNeko)?
             .jpegRepresentation
         #else
-        fatalError()
+        return TestResource.denwaNeko
         #endif
     }
 }
