@@ -8,8 +8,7 @@
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2F417-72KI%2FMultipartFormDataParser%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/417-72KI/MultipartFormDataParser)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/417-72KI/MultipartFormDataParser/master/LICENSE)
 
-
-Testing tool for `multipart/form-data` request in Swift.
+`MultipartFormDataParser` is a testing tool for `multipart/form-data` request in Swift.
 
 When to upload some files via API, we must use `multipart/form-data` for request.
 `multipart/form-data` is defined as [RFC-2388](https://www.ietf.org/rfc/rfc2388.txt)
@@ -65,7 +64,7 @@ stub(condition: condition) { request in
 
 ## Installation
 ### Swift Package Manager (recommended)
-#### Package.swift
+Package.swift
 
 ```swift
 dependencies: [
@@ -74,7 +73,7 @@ dependencies: [
 ```
 
 ### CocoaPods
-#### Podfile
+Podfile
 
 ```ruby
 pod 'MultipartFormDataParser'
