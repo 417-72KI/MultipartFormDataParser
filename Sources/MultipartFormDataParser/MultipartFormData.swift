@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public struct MultipartFormData {
     let elements: [Element]
@@ -33,7 +36,7 @@ public extension MultipartFormData.Element {
 
 extension MultipartFormData.Element {
     static func from(_ data: [Data]) -> Self {
-        var element = Self.init(name: "", data: .init(), fileName: nil, mimeType: nil)
+        var element = Self(name: "", data: .init(), fileName: nil, mimeType: nil)
         for line in data {
             guard let string = String(data: line, encoding: .utf8) else {
                 element.data = line

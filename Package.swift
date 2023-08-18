@@ -4,21 +4,29 @@
 import PackageDescription
 
 let isRelease = false
+let isLinux: Bool = {
+#if os(Linux)
+    return true
+#else
+    return false
+#endif
+}()
 
 let testDependencies: [Package.Dependency] = isRelease
 ? []
-: [
+: (isLinux ? [] : [
     .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.7.0"),
     .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
     .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
-]
+])
 let testTargetDependencies: [Target.Dependency] = isRelease
 ? []
 : [
+] + (isLinux ? [] : [
     "Alamofire",
     "APIKit",
     "Moya",
-]
+])
 
 let package = Package(
     name: "MultipartFormDataParser",

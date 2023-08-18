@@ -85,6 +85,10 @@ final class MultipartFormDataParserTests: XCTestCase {
     #endif
 
     func testURLSessionUploadTask() async throws {
+        #if os(Linux)
+        // FIXME: There is no way to get body stream with `URLSessionUploadTask`.
+        try XCTSkipIf(true, "Stubbing `URLSessionUploadTask` in Linux is not supported.")
+        #endif
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = try XCTUnwrap("Hello world!".data(using: .utf8))
@@ -111,6 +115,8 @@ private extension MultipartFormDataParserTests {
         #elseif canImport(Cocoa)
         return NSImage(data: TestResource.genbaNeko)?
             .jpegRepresentation
+        #elseif os(Linux)
+        return Image(data: TestResource.genbaNeko)?.data
         #else
         return TestResource.genbaNeko
         #endif
@@ -123,6 +129,8 @@ private extension MultipartFormDataParserTests {
         #elseif canImport(Cocoa)
         return NSImage(data: TestResource.denwaNeko)?
             .jpegRepresentation
+        #elseif os(Linux)
+        return Image(data: TestResource.denwaNeko)?.data
         #else
         return TestResource.denwaNeko
         #endif
