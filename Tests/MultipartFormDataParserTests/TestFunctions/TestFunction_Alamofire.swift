@@ -61,8 +61,6 @@ extension XCTestCase {
         }
     }
 
-    #if compiler(>=5.6) && canImport(_Concurrency)
-    @available(macOS 10.15, macCatalyst 13, iOS 13, tvOS 13, *)
     func uploadWithAlamoFireConcurrency(
         genbaNeko: Data,
         denwaNeko: Data,
@@ -95,7 +93,6 @@ extension XCTestCase {
         .serializingDecodable(TestEntity.self, decoder: decoder)
         .value
     }
-    #endif
 }
 
 private class Interceptor: RequestInterceptor {

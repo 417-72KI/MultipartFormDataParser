@@ -38,8 +38,6 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertNil(result.error)
     }
 
-    #if compiler(>=5.6) && canImport(_Concurrency)
-    @available(macCatalyst 13, iOS 13, tvOS 13, *)
     func testAlamofireWithConcurrency() async throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
@@ -48,7 +46,6 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
-    #endif
     #endif
 
     #if canImport(APIKit)
@@ -87,20 +84,20 @@ final class MultipartFormDataParserTests: XCTestCase {
     }
     #endif
 
-    func testURLSessionUploadTask() throws {
+    func testURLSessionUploadTask() async throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = try XCTUnwrap("Hello world!".data(using: .utf8))
-        let result = try XCTUnwrap(uploadURLSessionUploadTask(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message))
+        let result = try await uploadURLSessionUpload(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
 
-    func testURLSessionDataTask() throws {
+    func testURLSessionDataTask() async throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = try XCTUnwrap("Hello world!".data(using: .utf8))
-        let result = try XCTUnwrap(uploadURLSessionDataTask(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message))
+        let result = try await uploadURLSessionData(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
@@ -115,7 +112,7 @@ private extension MultipartFormDataParserTests {
         return NSImage(data: TestResource.genbaNeko)?
             .jpegRepresentation
         #else
-        fatalError()
+        return TestResource.genbaNeko
         #endif
     }
 
@@ -127,7 +124,7 @@ private extension MultipartFormDataParserTests {
         return NSImage(data: TestResource.denwaNeko)?
             .jpegRepresentation
         #else
-        fatalError()
+        return TestResource.denwaNeko
         #endif
     }
 }
