@@ -6,7 +6,7 @@ jobs:
   podspec:
     runs-on: macOS-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Lint
       run: pod spec lint
     - name: Deploy

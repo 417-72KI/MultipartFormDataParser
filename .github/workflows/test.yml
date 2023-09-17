@@ -19,7 +19,7 @@ jobs:
       latest: ${{ steps.extract-matrix.outputs.latest-xcode-version }}
       swift-versions: ${{ steps.extract-matrix.outputs.swift-versions }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: extract-matrix
         run: |
           echo "xcode-versions=$(cat .github/matrix.json | jq -rc '.xcode_version')" >> $GITHUB_OUTPUT
@@ -44,7 +44,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: create-destination-key
         name: Create destination key for cache
         run: echo "destination-key=$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')" >> $GITHUB_OUTPUT
@@ -106,7 +106,7 @@ jobs:
         swift: ${{ fromJson(needs.extract-matrix.outputs.swift-versions) }}
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3
         with:
           path: |
