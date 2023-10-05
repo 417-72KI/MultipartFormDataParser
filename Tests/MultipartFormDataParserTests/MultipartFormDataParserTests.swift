@@ -27,6 +27,16 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertEqual(data.element(forName: "message")?.string, "Hello world!")
     }
 
+    func testSequence() throws {
+        let genbaNeko = try XCTUnwrap(genbaNeko)
+        let denwaNeko = try XCTUnwrap(denwaNeko)
+        let message = try XCTUnwrap("Hello world!".data(using: .utf8))
+        let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let data = try MultipartFormData.parse(from: request)
+        XCTAssertEqual(["genbaNeko", "denwaNeko", "message"], data.map(\.name))
+        XCTAssertEqual([genbaNeko, denwaNeko, "Hello world!".data(using: .utf8)], data.map(\.data))
+    }
+
     #if canImport(Alamofire)
     func testAlamofire() throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
