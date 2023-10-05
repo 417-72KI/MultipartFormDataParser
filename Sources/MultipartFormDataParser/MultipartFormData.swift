@@ -4,7 +4,7 @@ import FoundationNetworking
 #endif
 
 public struct MultipartFormData {
-    let elements: [Element]
+    public let elements: [Element]
 }
 
 public extension MultipartFormData {
