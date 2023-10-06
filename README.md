@@ -68,7 +68,7 @@ Package.swift
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "2.1.1")
+    .package(url: "https://github.com/417-72KI/MultipartFormDataParser.git", from: "2.1.2")
 ]
 ```
 
