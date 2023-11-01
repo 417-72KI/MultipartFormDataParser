@@ -18,6 +18,7 @@ jobs:
       xcode-versions: ${{ steps.extract-matrix.outputs.xcode-versions }}
       latest: ${{ steps.extract-matrix.outputs.latest-xcode-version }}
       swift-versions: ${{ steps.extract-matrix.outputs.swift-versions }}
+      platforms: ${{ steps.extract-matrix.outputs.platforms }}
     steps:
       - uses: actions/checkout@v4
       - id: extract-matrix
@@ -25,6 +26,7 @@ jobs:
           echo "xcode-versions=$(cat .github/matrix.json | jq -rc '.xcode_version')" >> $GITHUB_OUTPUT
           echo "latest-xcode-version=$(cat .github/matrix.json | jq -r '.xcode_version | max')" >> $GITHUB_OUTPUT
           echo "swift-versions=$(cat .github/matrix.json | jq -rc '.swift_version')" >> $GITHUB_OUTPUT
+          echo "platforms=$(cat .github/matrix.json | jq -rc '.platform')" >> $GITHUB_OUTPUT
   test-macos:
     name: Test
     needs: extract-matrix
@@ -35,11 +37,7 @@ jobs:
     strategy:
       matrix:
         xcode: ${{ fromJson(needs.extract-matrix.outputs.xcode-versions) }}
-        destination: 
-          - "platform=macOS"
-          - "platform=macOS,variant=Mac Catalyst"
-          - "platform=iOS Simulator,name=iPhone 14 Pro"
-          - "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)"
+        destination: ${{ fromJson(needs.extract-matrix.outputs.platforms) }}
       fail-fast: false
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
