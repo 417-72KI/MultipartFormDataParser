@@ -78,7 +78,7 @@ jobs:
     needs: test-macos
     runs-on: macOS-13
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           path: test_output
       - name: Merge xcresult files
