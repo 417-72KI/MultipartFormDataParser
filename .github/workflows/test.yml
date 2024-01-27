@@ -27,6 +27,12 @@ jobs:
           echo "latest-xcode-version=$(cat .github/matrix.json | jq -r '.xcode_version | max')" >> $GITHUB_OUTPUT
           echo "swift-versions=$(cat .github/matrix.json | jq -rc '.swift_version')" >> $GITHUB_OUTPUT
           echo "platforms=$(cat .github/matrix.json | jq -rc '.platform')" >> $GITHUB_OUTPUT
+      - name: dump matrix
+        run: |
+          echo 'xcode-versions = ${{ steps.extract-matrix.outputs.xcode-versions }}'
+          echo 'latest-xcode-version = ${{ steps.extract-matrix.outputs.latest-xcode-version }}'
+          echo 'swift-versions = ${{ steps.extract-matrix.outputs.swift-versions }}'
+          echo 'platforms = ${{ steps.extract-matrix.outputs.platforms }}'
   test-macos:
     name: Test
     needs: extract-matrix
