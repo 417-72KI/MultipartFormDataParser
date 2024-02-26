@@ -52,7 +52,7 @@ jobs:
       - id: create-destination-key
         name: Create destination key for cache
         run: echo "destination-key=$(echo "${{ matrix.destination }}" | sed -r 's/[, ]/_/g')" >> $GITHUB_OUTPUT
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             .build/SourcePackages/checkouts
@@ -111,7 +111,7 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             .build/SourcePackages/checkouts
