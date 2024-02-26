@@ -73,7 +73,7 @@ jobs:
           clean test | xcpretty
       - name: Upload test result
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.xcode }} == ${{ needs.extract-matrix.outputs.latest }} && (success() || failure())
+        if: ${{ matrix.xcode == needs.extract-matrix.outputs.latest && (success() || failure()) }}
         with:
           name: ${{ steps.create-destination-key.outputs.destination-key }}
           path: test_output
