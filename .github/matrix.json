@@ -1,12 +1,13 @@
 {
     "xcode_version": [
         "14.3.1",
-        "15.2"
+        "15.2",
+        "15.3"
     ],
     "swift_version": [
-        "5.7",
         "5.8",
-        "5.9"
+        "5.9",
+        "5.10"
     ],
     "platform": [
         "platform=macOS",
