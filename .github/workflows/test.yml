@@ -36,7 +36,7 @@ jobs:
   test-macos:
     name: Test
     needs: extract-matrix
-    runs-on: macos-13
+    runs-on: macOS-14
     concurrency: 
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
@@ -82,7 +82,7 @@ jobs:
   xcodebuild_result:
     name: Export xcodebuild test result
     needs: test-macos
-    runs-on: macOS-13
+    runs-on: macOS-14
     steps:
       - uses: actions/download-artifact@v4
         with:

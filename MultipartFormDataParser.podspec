@@ -23,6 +23,6 @@ Pod::Spec.new do |spec|
         
     spec.source         = { :git => "https://github.com/417-72KI/#{spec.name}.git", :tag => "#{spec.version}" }
     spec.source_files   = 'Sources/MultipartFormDataParser/**/*.swift'
-    spec.swift_versions = ['5.5', '5.6', '5.7', '5.8']
+    spec.swift_versions = ['5.8', '5.9', '5.10']
     spec.frameworks     = 'Foundation'
 end

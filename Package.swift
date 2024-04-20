@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.8
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -12,22 +12,6 @@ let isLinux: Bool = {
 #endif
 }()
 
-let testDependencies: [Package.Dependency] = isRelease
-? []
-: (isLinux ? [] : [
-    .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.7.0"),
-    .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
-    .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
-])
-let testTargetDependencies: [Target.Dependency] = isRelease
-? []
-: [
-] + (isLinux ? [] : [
-    "Alamofire",
-    "APIKit",
-    "Moya",
-])
-
 let package = Package(
     name: "MultipartFormDataParser",
     platforms: [
@@ -39,9 +23,10 @@ let package = Package(
     products: [
         .library(
             name: "MultipartFormDataParser",
-            targets: ["MultipartFormDataParser"]),
+            targets: ["MultipartFormDataParser"]
+        ),
     ],
-    dependencies: testDependencies,
+    dependencies: [],
     targets: [
         .target(
             name: "MultipartFormDataParser",
@@ -49,9 +34,27 @@ let package = Package(
         ),
         .testTarget(
             name: "MultipartFormDataParserTests",
-            dependencies: [
-                "MultipartFormDataParser",
-            ] + testTargetDependencies
+            dependencies: ["MultipartFormDataParser"]
         ),
     ]
 )
+
+// MARK: - develop
+if !isRelease {
+    if !isLinux {
+        package.dependencies.append(contentsOf: [
+            .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.7.0"),
+            .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
+            .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
+        ])
+        package.targets
+            .filter(\.isTest)
+            .forEach {
+                $0.dependencies.append(contentsOf: [
+                    "Alamofire",
+                    "APIKit",
+                    "Moya"
+                ])
+            }
+    }
+}
