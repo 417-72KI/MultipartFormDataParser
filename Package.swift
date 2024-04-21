@@ -15,10 +15,11 @@ let isLinux: Bool = {
 let package = Package(
     name: "MultipartFormDataParser",
     platforms: [
-        .macOS(.v12),
-        .macCatalyst(.v15),
-        .iOS(.v15),
-        .tvOS(.v15)
+        .macOS(.v13),
+        .macCatalyst(.v16),
+        .iOS(.v16),
+        .tvOS(.v16),
+        .watchOS("999999"), // unsupported
     ],
     products: [
         .library(
