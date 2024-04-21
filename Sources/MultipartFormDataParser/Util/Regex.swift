@@ -1,5 +1,6 @@
 import Foundation
 
+@available(*, deprecated, message: "Use regex literals instead.")
 struct RegularExpression {
     private let regex: NSRegularExpression
 
@@ -12,6 +13,7 @@ struct RegularExpression {
     }
 }
 
+@available(*, deprecated, message: "Use regex literals instead.")
 extension RegularExpression {
     func firstMatch(in string: String) -> MatchingResult? {
         guard let result = regex.firstMatch(in: string, options: [], range: .init(location: 0, length: string.count)) else { return nil }
@@ -19,6 +21,7 @@ extension RegularExpression {
     }
 }
 
+@available(*, deprecated, message: "Use regex literals instead.")
 extension RegularExpression {
     struct MatchingResult {
         private let string: NSString
@@ -31,6 +34,7 @@ extension RegularExpression {
     }
 }
 
+@available(*, deprecated, message: "Use regex literals instead.")
 extension RegularExpression.MatchingResult {
     func grouped(withName name: String) -> String? {
         let range = result.range(withName: name)
