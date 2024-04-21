@@ -27,6 +27,7 @@ private extension MultipartFormDataParser {
         defer { stream.close() }
         var data = Data()
         while stream.hasBytesAvailable {
+            // swiftlint:disable:next no_magic_numbers
             var buffer = [UInt8](repeating: 0, count: 512)
             let readCount = stream.read(&buffer, maxLength: buffer.count)
             guard readCount > 0 else { break }
