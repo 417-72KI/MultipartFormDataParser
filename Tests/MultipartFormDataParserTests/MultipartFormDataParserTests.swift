@@ -37,6 +37,45 @@ final class MultipartFormDataParserTests: XCTestCase {
         XCTAssertEqual([genbaNeko, denwaNeko, "Hello world!".data(using: .utf8)], data.map(\.data))
     }
 
+    // MARK: Failure
+    func testEmptyBody() throws {
+        var request = URLRequest(url: URL(string: "https://localhost/empty")!)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=foobar", forHTTPHeaderField: "Content-Type")
+        request.httpBody = Data("".utf8)
+        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
+            XCTAssertEqual($0.localizedDescription, "HTTP body stream is empty.")
+        }
+    }
+
+    func testNoContentType() throws {
+        let request = URLRequest(url: URL(string: "https://localhost/empty")!)
+        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
+            XCTAssertEqual($0.localizedDescription, "No Content-Type")
+        }
+    }
+
+    func testInvalidContentType() throws {
+        var request = URLRequest(url: URL(string: "https://localhost/empty")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = Data("".utf8)
+        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
+            XCTAssertEqual($0.localizedDescription, "Invalid Content-Type: application/json")
+        }
+    }
+
+    func testInvalidBody() throws {
+        var request = URLRequest(url: URL(string: "https://localhost/empty")!)
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=foobar", forHTTPHeaderField: "Content-Type")
+        request.httpBody = Data("----".utf8)
+        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
+            XCTAssertEqual($0.localizedDescription, "Invalid stream.")
+        }
+    }
+
+    // MARK: using 3rd-party libraries
     #if canImport(Alamofire)
     func testAlamofire() throws {
         let genbaNeko = try XCTUnwrap(genbaNeko)
@@ -94,6 +133,7 @@ final class MultipartFormDataParserTests: XCTestCase {
     }
     #endif
 
+    // MARK: URLSession
     func testURLSessionUploadTask() async throws {
         #if os(Linux)
         // FIXME: There is no way to get body stream with `URLSessionUploadTask`.

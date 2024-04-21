@@ -6,8 +6,8 @@ public enum MultipartFormDataError: LocalizedError {
     case httpBodyStreamEmpty
     case invalidHttpBodyStream
 
-    case testFailed(String)
-    case notImplemented
+    // case testFailed(String)
+    // case notImplemented
 }
 
 extension MultipartFormDataError {
@@ -19,8 +19,8 @@ extension MultipartFormDataError {
         case .httpBodyStreamEmpty: return "HTTP body stream is empty."
         case .invalidHttpBodyStream: return "Invalid stream."
 
-        case let .testFailed(reason): return "Test failed: \(reason)"
-        case .notImplemented: return "Not implemented"
+        // case let .testFailed(reason): return "Test failed: \(reason)"
+        // case .notImplemented: return "Not implemented"
         }
     }
 }
