@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let isRelease = true
+let isRelease = false
 let isLinux: Bool = {
 #if os(Linux)
     return true
