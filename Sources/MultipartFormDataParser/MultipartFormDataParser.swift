@@ -61,8 +61,8 @@ extension MultipartFormDataParser {
         guard let contentType = request.value(forHTTPHeaderField: "Content-Type") else {
             throw MultipartFormDataError.noContentType
         }
-        let regex = RegularExpression(pattern: #"multipart/form-data; boundary=(.*)"#)
-        guard let boundary = regex.firstMatch(in: contentType)?.range(at: 1) else {
+        let regex = #/multipart/form-data; boundary=(.*)/#
+        guard let boundary = (try! regex.firstMatch(in: contentType)?.output.1).flatMap(String.init) else {
             throw MultipartFormDataError.invalidContentType(contentType)
         }
         if let body = request.httpBody, !body.isEmpty {
