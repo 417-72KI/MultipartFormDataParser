@@ -26,6 +26,6 @@ extension Data {
     }
 
     func split(separator: String) -> [Data] {
-        split(separator: Data(separator.utf8).bytes)
+        split(separator: Data(separator.utf8))
     }
 }
