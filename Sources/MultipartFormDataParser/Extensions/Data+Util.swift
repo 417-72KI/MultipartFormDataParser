@@ -26,7 +26,6 @@ extension Data {
     }
 
     func split(separator: String) -> [Data] {
-        separator.data(using: .utf8)
-            .flatMap { split(separator: $0.bytes) } ?? [self]
+        split(separator: Data(separator.utf8).bytes)
     }
 }
