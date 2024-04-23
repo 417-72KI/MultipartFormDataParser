@@ -3,16 +3,12 @@ import Foundation
 import FoundationNetworking
 #endif
 
-#if canImport(Cocoa) && !targetEnvironment(macCatalyst)
-import Cocoa
-typealias Image = NSImage
-#endif
-
 #if canImport(UIKit)
 import UIKit
 typealias Image = UIImage
-#endif
-
+#elseif canImport(Cocoa)
+import Cocoa
+typealias Image = NSImage
 #endif
 
 import MultipartFormDataParser
