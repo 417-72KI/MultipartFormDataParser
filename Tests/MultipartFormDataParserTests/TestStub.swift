@@ -62,7 +62,7 @@ private let uploadTestStubResponse: HTTPStubsResponseBlock = { request in
 private let uploadTestStubResponse: StubURLProtocol.RequestHandler = { request in
     let errorResponse = { (message: String) -> (Data?, HTTPURLResponse) in
         (
-            #"{"status": 403, "error": "\#(message)"}"#.data(using: .utf8),
+            Data(#"{"status": 403, "error": "\#(message)"}"#.utf8),
             HTTPURLResponse(url: request.url!,
                             statusCode: 403,
                             httpVersion: "HTTP/2",
