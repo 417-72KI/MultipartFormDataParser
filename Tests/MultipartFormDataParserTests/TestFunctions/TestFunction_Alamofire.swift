@@ -5,13 +5,9 @@ import XCTest
 import Alamofire
 
 private let session: Session = {
-    #if canImport(OHHTTPStubs)
-    return AF
-    #else
     let configuration = URLSessionConfiguration.ephemeral
     configuration.protocolClasses = [StubURLProtocol.self]
     return Session(configuration: configuration)
-    #endif
 }()
 
 extension XCTestCase {

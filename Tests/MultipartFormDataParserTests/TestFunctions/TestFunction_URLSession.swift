@@ -5,13 +5,9 @@ import FoundationNetworking
 import XCTest
 
 private let session: URLSession = {
-    #if canImport(OHHTTPStubs)
-    return .shared
-    #else
     let configuration = URLSessionConfiguration.ephemeral
     configuration.protocolClasses = [StubURLProtocol.self]
     return URLSession(configuration: configuration)
-    #endif
 }()
 
 extension XCTestCase {
