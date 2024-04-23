@@ -69,7 +69,21 @@ final class MultipartFormDataParserTests: XCTestCase {
         var request = URLRequest(url: URL(string: "https://localhost/empty")!)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=foobar", forHTTPHeaderField: "Content-Type")
-        request.httpBody = Data("----".utf8)
+
+        // body not contains `CRLF`
+        request.httpBody = Data("--foobar".utf8)
+        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
+            XCTAssertEqual($0.localizedDescription, "Invalid stream.")
+        }
+
+        // body not started with boundary
+        request.httpBody = Data("foobar\r\n".utf8)
+        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
+            XCTAssertEqual($0.localizedDescription, "Invalid stream.")
+        }
+
+        // body not end with `--{boundary}--`
+        request.httpBody = Data("--foobar\r\n".utf8)
         XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
             XCTAssertEqual($0.localizedDescription, "Invalid stream.")
         }
