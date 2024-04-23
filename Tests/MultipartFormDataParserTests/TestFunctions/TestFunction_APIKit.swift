@@ -5,14 +5,10 @@ import XCTest
 import APIKit
 
 private let session: Session = {
-    #if canImport(OHHTTPStubs)
-    return .shared
-    #else
     let configuration = URLSessionConfiguration.default
     configuration.protocolClasses = [StubURLProtocol.self]
     let adapter = URLSessionAdapter(configuration: configuration)
     return Session(adapter: adapter)
-    #endif
 }()
 
 extension XCTestCase {

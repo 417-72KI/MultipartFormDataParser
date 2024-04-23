@@ -5,13 +5,9 @@ import XCTest
 import Moya
 
 private let provider: MoyaProvider<TestTarget> = {
-    #if canImport(OHHTTPStubs)
-    return MoyaProvider()
-    #else
     let configuration = URLSessionConfiguration.ephemeral
     configuration.protocolClasses = [StubURLProtocol.self]
     return MoyaProvider(session: Session(configuration: configuration))
-    #endif
 }()
 
 extension XCTestCase {
