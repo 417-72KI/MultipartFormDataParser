@@ -15,4 +15,4 @@ test:
 	xed test_output/test_result.xcresult
 
 release:
-	@scripts/release.sh ${PROJECT_NAME} ${ver}
+	@scripts/release.swift ${PROJECT_NAME} ${ver}
