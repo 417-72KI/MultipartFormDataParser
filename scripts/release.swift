@@ -48,21 +48,21 @@ do {
     // Update version
     let readmeFile = "README.md"
     try String(decoding: try Data(contentsOf: URL(fileURLWithPath: readmeFile)), as: UTF8.self)
-        .replacing(try! Regex(#"(?<prefix>\.package\(url: \".*\#(projectName)\.git\", from: \").*(?<suffix>\"\),?)"#)) { match in 
+        .replacing(try! Regex(#"(?<prefix>\.package\(url: \".*\#(projectName)\.git\", from: \").*(?<suffix>\"\),?)"#)) { match in
             if let values = match.output.extractValues(as: (Substring, prefix: Substring, suffix: Substring).self) {
                 "\(values.prefix)\(tag)\(values.suffix)"
-            } else { 
+            } else {
                 ""
             }
         }
         .write(toFile: readmeFile, atomically: true, encoding: .utf8)
-    
+
     let packageFile = "Package.swift"
     let packageContent = String(decoding: try Data(contentsOf: URL(fileURLWithPath: packageFile)), as: UTF8.self)
     try packageContent.replacing(#/(let isRelease = )(true|false)/#) { match in
-            "\(match.output.1)true"
-        }
-        .write(toFile: packageFile, atomically: true, encoding: .utf8)
+        "\(match.output.1)true"
+    }
+    .write(toFile: packageFile, atomically: true, encoding: .utf8)
 
     // Update podspec
     let macOSVersion = packageContent.firstMatch(of: #/macOS\(\.v([0-9]+)\)/#)!.output.1.paddingCommaZero()
@@ -71,16 +71,16 @@ do {
 
     let podspecFile = "\(projectName).podspec"
     try String(decoding: try Data(contentsOf: URL(fileURLWithPath: podspecFile)), as: UTF8.self)
-        .replacing(#/(spec\.version *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in 
+        .replacing(#/(spec\.version *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in
             "\(match.output.1)\"\(tag)\""
         }
-        .replacing(#/(spec\.osx\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in 
+        .replacing(#/(spec\.osx\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in
             "\(match.output.1)\"\(macOSVersion)\""
         }
-        .replacing(#/(spec\.ios\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in 
+        .replacing(#/(spec\.ios\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in
             "\(match.output.1)\"\(iOSVersion)\""
         }
-        .replacing(#/(spec\.tvos\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in 
+        .replacing(#/(spec\.tvos\.deployment_target *= )\"([0-9]*\.[0-9]*(\.[0-9]*)?)\"/#) { match in
             "\(match.output.1)\"\(tvOSVersion)\""
         }
         .write(toFile: podspecFile, atomically: true, encoding: .utf8)
@@ -131,7 +131,7 @@ extension String: LocalizedError {
 // MARK: - Regex
 extension StringProtocol {
     func paddingCommaZero() -> String {
-        if contains(".") { 
+        if contains(".") {
             String(self)
         } else {
             "\(self).0"
