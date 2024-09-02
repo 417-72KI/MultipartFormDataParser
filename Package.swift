@@ -3,13 +3,13 @@
 
 import PackageDescription
 
-let isRelease = false
-let isLinux: Bool = {
-#if os(Linux)
-    return true
-#else
-    return false
-#endif
+let isDevelop = true
+let isApplePlatform: Bool = {
+    #if canImport(Darwin)
+    true
+    #else
+    false
+    #endif
 }()
 
 let package = Package(
@@ -40,9 +40,10 @@ let package = Package(
 )
 
 // MARK: - develop
-if !isRelease {
-    if !isLinux {
+if isDevelop {
+    if isApplePlatform {
         package.dependencies.append(contentsOf: [
+            .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0"),
             .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.7.0"),
             .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
             .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
@@ -56,5 +57,11 @@ if !isRelease {
                     "Moya"
                 ])
             }
+        package.targets.forEach {
+            if $0.plugins == nil {
+                $0.plugins = []
+            }
+            $0.plugins?.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
+        }
     }
 }
