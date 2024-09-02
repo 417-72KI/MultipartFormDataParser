@@ -44,7 +44,7 @@ if [ "$(git fetch --tags && git tag | grep "${TAG}")" != '' ]; then
 fi
 
 sed -i '' -E "s/(\.package\(url: \".*${PROJECT_NAME}\.git\", from: \").*(\"\),?)/\1${TAG}\2/g" README.md
-sed -i '' -E "s/(let isRelease = )(true|false)/\1true/" Package.swift
+sed -i '' -E "s/(let isDevelop = )(true|false)/\1false/" Package.swift
 
 # Podspec
 MAC_OS_VERSION="$(cat Package.swift | grep '.macOS(.v' | sed -E "s/ *\.macOS\(\.v([0-9_]*)\),?/\1/g" | sed -E "s/_/./g")"
@@ -76,8 +76,8 @@ if [ $DEBUG -eq 0 ]; then
     gh release create ${TAG} --target main --title ${TAG} --generate-notes
 fi
 
-sed -i '' -E "s/(let isRelease = )(true|false)/\1false/" Package.swift
-git commit $COMMIT_OPTION -m 'switch release flag to false' Package.swift
+sed -i '' -E "s/(let isDevelop = )(true|false)/\1true/" Package.swift
+git commit $COMMIT_OPTION -m 'switch develop flag to true' Package.swift
 if [ $DEBUG -eq 0 ]; then
     git push origin main
 fi
