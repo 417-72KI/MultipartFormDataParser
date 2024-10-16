@@ -1,7 +1,8 @@
 included:
   - Sources
-excluded:
   - Tests
+excluded:
+  - .build
 opt_in_rules: [all]
 disabled_rules:
   - conditional_returns_on_newline
@@ -15,7 +16,7 @@ disabled_rules:
   - file_name
   - file_types_order
   - function_default_parameter_at_end
-  - lower_acl_than_parent # 対応不可
+  - lower_acl_than_parent
   - missing_docs
   - no_extension_access_modifier
   - no_grouping_extension
@@ -47,7 +48,7 @@ explicit_type_interface:
 nesting:
   type_level: 2
 attributes:
-  always_on_same_line: 
+  always_on_same_line:
     - '@IBAction'
     - '@NSManaged'
     - '@objc'
@@ -55,5 +56,7 @@ multiline_arguments:
   only_enforce_after_first_closure_on_first_line: true
 number_separator:
   minimum_length: 5
+trailing_comma:
+  mandatory_comma: true
 trailing_closure:
   only_single_muted_parameter: true
