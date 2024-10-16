@@ -15,6 +15,7 @@ disabled_rules:
   - file_header
   - file_name
   - file_types_order
+  - force_try
   - force_unwrapping
   - function_default_parameter_at_end
   - lower_acl_than_parent

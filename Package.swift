@@ -15,10 +15,10 @@ let isApplePlatform: Bool = {
 let package = Package(
     name: "MultipartFormDataParser",
     platforms: [
-        .macOS(.v12),
-        .macCatalyst(.v15),
-        .iOS(.v15),
-        .tvOS(.v15)
+        .macOS(.v13),
+        .macCatalyst(.v16),
+        .iOS(.v16),
+        .tvOS(.v16)
     ],
     products: [
         .library(name: "MultipartFormDataParser", targets: ["MultipartFormDataParser"]),

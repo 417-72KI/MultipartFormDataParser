@@ -42,20 +42,16 @@ extension MultipartFormData.Element {
                 element.data = line
                 continue
             }
-            if let contentDispositionMatches = RegularExpression(pattern: #"Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?"#)
-                .firstMatch(in: string) {
-                if let name = contentDispositionMatches.grouped(withName: "name") {
-                    element.name = name
-                }
-                if let filename = contentDispositionMatches.grouped(withName: "filename") {
-                    element.fileName = filename
+
+            if let contentDispositionMatches = try! #/Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?/#.firstMatch(in: string) {
+                element.name = String(contentDispositionMatches.output.name)
+                if let filename = contentDispositionMatches.output.filename {
+                    element.fileName = String(filename)
                 }
                 continue
             }
-            if let mimeType = RegularExpression(pattern: #"Content-Type: (?<mimetype>.*/.*)"#)
-                .firstMatch(in: string)
-                .flatMap({ $0.grouped(withName: "mimetype") }) {
-                element.mimeType = mimeType
+            if let mimeTypeMatches = try! #/Content-Type: (?<mimetype>.*/.*)/#.firstMatch(in: string) {
+                element.mimeType = String(mimeTypeMatches.output.mimetype)
                 continue
             }
             if element.data.isEmpty {
