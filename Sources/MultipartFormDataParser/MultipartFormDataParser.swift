@@ -5,7 +5,7 @@ import FoundationNetworking
 
 private let crlf = "\r\n"
 
-struct MultipartFormDataParser {
+struct MultipartFormDataParser: Sendable {
     private let boundary: String
 }
 
@@ -61,10 +61,11 @@ extension MultipartFormDataParser {
         guard let contentType = request.value(forHTTPHeaderField: "Content-Type") else {
             throw MultipartFormDataError.noContentType
         }
-        let regex = RegularExpression(pattern: #"multipart/form-data; boundary=(.*)"#)
-        guard let boundary = regex.firstMatch(in: contentType)?.range(at: 1) else {
+        let regex = #/multipart/form-data; boundary=(.*)/#
+        guard let boundaryMatches = try! regex.firstMatch(in: contentType) else {
             throw MultipartFormDataError.invalidContentType(contentType)
         }
+        let boundary = String(boundaryMatches.output.1)
         if let body = request.httpBody, !body.isEmpty {
             return try Self(boundary: boundary).parse(body)
         }
