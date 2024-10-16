@@ -15,12 +15,14 @@ disabled_rules:
   - file_header
   - file_name
   - file_types_order
+  - force_unwrapping
   - function_default_parameter_at_end
   - lower_acl_than_parent
   - missing_docs
   - no_extension_access_modifier
   - no_grouping_extension
   - object_literal
+  - prefer_nimble
   - prefixed_toplevel_constant
   - prohibited_interface_builder
   - required_deinit

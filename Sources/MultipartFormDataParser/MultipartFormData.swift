@@ -31,16 +31,14 @@ public extension MultipartFormData {
 }
 
 public extension MultipartFormData.Element {
-    // swiftlint:disable:next non_optional_string_data_conversion
-    var string: String? { String(data: data, encoding: .utf8) } // binaries should be nil
+    var string: String? { String(data: data, encoding: .utf8) }
 }
 
 extension MultipartFormData.Element {
     static func from(_ data: [Data]) -> Self {
         var element = Self(name: "", data: .init(), fileName: nil, mimeType: nil)
         for line in data {
-            // swiftlint:disable:next non_optional_string_data_conversion
-            guard let string = String(data: line, encoding: .utf8) else { // binaries should be nil
+            guard let string = String(data: line, encoding: .utf8) else {
                 element.data = line
                 continue
             }
