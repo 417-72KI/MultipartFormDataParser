@@ -11,6 +11,7 @@ import UIKit
 import Cocoa
 #endif
 
+@MainActor
 final class MultipartFormDataParserTests: XCTestCase {
     override class func setUp() {
         stubForUpload()

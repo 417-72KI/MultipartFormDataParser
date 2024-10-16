@@ -11,6 +11,7 @@ private let provider: MoyaProvider<TestTarget> = {
 }()
 
 extension XCTestCase {
+    @MainActor
     func uploadWithMoya(
         genbaNeko: Data,
         denwaNeko: Data,

@@ -11,6 +11,7 @@ private let session: Session = {
 }()
 
 extension XCTestCase {
+    @MainActor
     func uploadWithAlamoFire(
         genbaNeko: Data,
         denwaNeko: Data,
