@@ -19,12 +19,13 @@ extension XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> URLRequest {
-        try TestRequest(genbaNeko: genbaNeko,
-                        denwaNeko: denwaNeko,
-                        message: message,
-                        file: file,
-                        line: line)
-            .buildURLRequest()
+        try TestRequest(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            message: message,
+            file: file,
+            line: line
+        ).buildURLRequest()
     }
 
     func uploadWithAPIKit(
@@ -79,7 +80,7 @@ private struct TestRequest: APIKit.Request {
     var file: StaticString
     var line: UInt
 
-    var bodyParameters: BodyParameters? {
+    var bodyParameters: (any BodyParameters)? {
         let parts: [MultipartFormDataBodyParameters.Part] = [
             .init(
                 data: genbaNeko,
