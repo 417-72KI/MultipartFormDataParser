@@ -16,7 +16,7 @@ extension XCTestCase {
         denwaNeko: Data,
         message: Data,
         retryCount: UInt = 3,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async throws -> TestEntity {
         let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
@@ -39,7 +39,7 @@ extension XCTestCase {
         denwaNeko: Data,
         message: Data,
         retryCount: UInt = 3,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async throws -> TestEntity {
         let boundary = "YoWatanabe0417"
@@ -70,7 +70,7 @@ extension XCTestCase {
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> URLRequest {
         let boundary = "YoWatanabe0417"

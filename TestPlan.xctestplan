@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "D06DC996-5C46-43C0-A9F0-BF25ED72E3C9",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "maximumTestRepetitions" : 5,
+    "nsZombieEnabled" : true,
+    "repeatInNewRunnerProcess" : true,
+    "testRepetitionMode" : "retryOnFailure",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "MultipartFormDataParserTests",
+        "name" : "MultipartFormDataParserTests"
+      }
+    }
+  ],
+  "version" : 1
+}

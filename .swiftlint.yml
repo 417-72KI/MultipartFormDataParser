@@ -15,12 +15,14 @@ disabled_rules:
   - file_header
   - file_name
   - file_types_order
+  - force_unwrapping
   - function_default_parameter_at_end
   - lower_acl_than_parent
   - missing_docs
   - no_extension_access_modifier
   - no_grouping_extension
   - object_literal
+  - prefer_nimble
   - prefixed_toplevel_constant
   - prohibited_interface_builder
   - required_deinit
@@ -30,6 +32,7 @@ disabled_rules:
   - switch_case_on_newline
   - unowned_variable_capture
   - unused_optional_binding
+  - unused_parameter
   - vertical_whitespace_between_cases
 line_length:
   warning: 180

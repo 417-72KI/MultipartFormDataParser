@@ -16,7 +16,7 @@ extension XCTestCase {
         denwaNeko: Data,
         message: Data,
         retryCount: UInt = 3,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> TestEntity? {
         let exp = expectation(description: "response")
@@ -42,12 +42,11 @@ extension XCTestCase {
         var response: AFDataResponse<TestEntity>!
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        task.responseDecodable(of: TestEntity.self,
-                               decoder: decoder) {
+        task.responseDecodable(of: TestEntity.self, decoder: decoder) {
             response = $0
             exp.fulfill()
         }
-        waitForExpectations(timeout: timeoutInterval)
+        wait(for: [exp], timeout: timeoutInterval)
 
         XCTAssertNotNil(response, file: file, line: line)
         XCTAssertEqual(response?.response?.statusCode, 200, file: file, line: line)
@@ -62,7 +61,7 @@ extension XCTestCase {
         denwaNeko: Data,
         message: Data,
         retryCount: UInt = 3,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) async throws -> TestEntity {
         let decoder = JSONDecoder()
@@ -94,7 +93,7 @@ extension XCTestCase {
 private class Interceptor: RequestInterceptor {
     private let lock = NSLock()
 
-    func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+    func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
         lock.lock(); defer { lock.unlock() }
 
         if request.retryCount < 3 {
