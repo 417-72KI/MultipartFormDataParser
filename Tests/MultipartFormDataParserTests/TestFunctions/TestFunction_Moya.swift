@@ -11,7 +11,6 @@ private let provider: MoyaProvider<TestTarget> = {
 }()
 
 extension XCTestCase {
-    @MainActor
     func uploadWithMoya(
         genbaNeko: Data,
         denwaNeko: Data,
@@ -34,7 +33,7 @@ extension XCTestCase {
             result = $0
             exp.fulfill()
         }
-        waitForExpectations(timeout: timeoutInterval)
+        wait(for: [exp], timeout: timeoutInterval)
 
         XCTAssertNotNil(result)
 

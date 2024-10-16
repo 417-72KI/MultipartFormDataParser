@@ -11,7 +11,6 @@ private let session: Session = {
 }()
 
 extension XCTestCase {
-    @MainActor
     func uploadWithAlamoFire(
         genbaNeko: Data,
         denwaNeko: Data,
@@ -43,12 +42,11 @@ extension XCTestCase {
         var response: AFDataResponse<TestEntity>!
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        task.responseDecodable(of: TestEntity.self,
-                               decoder: decoder) {
+        task.responseDecodable(of: TestEntity.self, decoder: decoder) {
             response = $0
             exp.fulfill()
         }
-        waitForExpectations(timeout: timeoutInterval)
+        wait(for: [exp], timeout: timeoutInterval)
 
         XCTAssertNotNil(response, file: file, line: line)
         XCTAssertEqual(response?.response?.statusCode, 200, file: file, line: line)
