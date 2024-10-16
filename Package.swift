@@ -21,21 +21,12 @@ let package = Package(
         .tvOS(.v15)
     ],
     products: [
-        .library(
-            name: "MultipartFormDataParser",
-            targets: ["MultipartFormDataParser"]
-        ),
+        .library(name: "MultipartFormDataParser", targets: ["MultipartFormDataParser"]),
     ],
     dependencies: [],
     targets: [
-        .target(
-            name: "MultipartFormDataParser",
-            dependencies: []
-        ),
-        .testTarget(
-            name: "MultipartFormDataParserTests",
-            dependencies: ["MultipartFormDataParser"]
-        ),
+        .target(name: "MultipartFormDataParser"),
+        .testTarget(name: "MultipartFormDataParserTests", dependencies: ["MultipartFormDataParser"]),
     ]
 )
 
