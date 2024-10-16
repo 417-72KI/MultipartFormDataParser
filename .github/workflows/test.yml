@@ -7,7 +7,7 @@ on:
       - Sources/**/*.swift
       - Tests/**/*.swift
       - .github/matrix.json
-concurrency: 
+concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 jobs:
@@ -37,7 +37,7 @@ jobs:
     name: Test
     needs: extract-matrix
     runs-on: macOS-14
-    concurrency: 
+    concurrency:
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.xcode }}-${{ matrix.destination }}
       cancel-in-progress: true
     strategy:
@@ -59,6 +59,10 @@ jobs:
           key: ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-${{ hashFiles('Package.swift') }}
           restore-keys: |
             ${{ runner.os }}-xcode-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-
+      - name: Enable macro and plugin
+        run: |
+          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
       - name: test
         run: |
           defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
@@ -102,7 +106,7 @@ jobs:
     needs: extract-matrix
     runs-on: ubuntu-latest
     container: swift:${{ matrix.swift }}
-    concurrency: 
+    concurrency:
       group: ${{ github.head_ref }}-${{ github.workflow }}-${{ matrix.swift }}
       cancel-in-progress: true
     strategy:
