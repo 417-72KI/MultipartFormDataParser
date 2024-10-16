@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
     spec.name         = "MultipartFormDataParser"
-    spec.version      = "2.2.2"
+    spec.version      = "2.3.0"
     spec.summary      = "Mocking UserDefaults for tests"
         
     spec.description  = <<-DESC
