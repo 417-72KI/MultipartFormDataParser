@@ -17,7 +17,7 @@ extension XCTestCase {
         denwaNeko: Data,
         message: Data,
         retryCount: UInt = 3,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> TestEntity? {
         let exp = expectation(description: "response")

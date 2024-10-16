@@ -16,7 +16,7 @@ extension XCTestCase {
         genbaNeko: Data,
         denwaNeko: Data,
         message: Data,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> URLRequest {
         try TestRequest(
@@ -33,7 +33,7 @@ extension XCTestCase {
         denwaNeko: Data,
         message: Data,
         retryCount: UInt = 3,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> TestEntity {
         let exp = expectation(description: "response")
