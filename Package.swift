@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let isDevelop = false
+let isDevelop = true
 let isApplePlatform: Bool = {
     #if canImport(Darwin)
     true
