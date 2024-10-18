@@ -37,7 +37,6 @@ if isDevelop {
             .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0"),
             .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.7.0"),
             .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
-            .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
         ])
         package.targets
             .filter(\.isTest)
@@ -45,7 +44,6 @@ if isDevelop {
                 $0.dependencies.append(contentsOf: [
                     "Alamofire",
                     "APIKit",
-                    "Moya"
                 ])
             }
         package.targets.forEach {

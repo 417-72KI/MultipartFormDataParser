@@ -141,18 +141,6 @@ final class MultipartFormDataParserTests: XCTestCase {
     }
     #endif
 
-    #if canImport(Moya)
-    func testMoya() throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
-        let message = Data("Hello world!".utf8)
-
-        let result = try XCTUnwrap(uploadWithMoya(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message))
-        XCTAssertEqual(result.status, 200)
-        XCTAssertNil(result.error)
-    }
-    #endif
-
     // MARK: URLSession
     func testURLSessionUploadTask() async throws {
         #if os(Linux)
