@@ -18,8 +18,7 @@ extension XCTestCase {
         retryCount: UInt = 3,
         file: StaticString = #filePath,
         line: UInt = #line
-    ) throws -> TestEntity? {
-        let exp = expectation(description: "response")
+    ) async throws -> TestEntity? {
         let task = session.upload(
             multipartFormData: { formData in
                 formData.append(
@@ -39,17 +38,15 @@ extension XCTestCase {
             to: "https://localhost/upload",
             interceptor: Interceptor()
         )
-        var response: AFDataResponse<TestEntity>!
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
-        task.responseDecodable(of: TestEntity.self, decoder: decoder) {
-            response = $0
-            exp.fulfill()
-        }
-        wait(for: [exp], timeout: timeoutInterval)
 
-        XCTAssertNotNil(response, file: file, line: line)
-        XCTAssertEqual(response?.response?.statusCode, 200, file: file, line: line)
+        let response = await withCheckedContinuation { cont in
+            task.responseDecodable(of: TestEntity.self, decoder: decoder) {
+                cont.resume(returning: $0)
+            }
+        }
+        XCTAssertEqual(response.response?.statusCode, 200, file: file, line: line)
         switch response.result {
         case let .success(entity): return entity
         case let .failure(error): throw error
