@@ -59,9 +59,8 @@ extension XCTestCase {
             if retryCount > 0 {
                 print("retry: \(retryCount)")
                 return try uploadWithAPIKit(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message, retryCount: retryCount - 1, file: file, line: line)
-            } else {
-                throw error
             }
+            throw error
         }
     }
 }
@@ -94,7 +93,7 @@ private struct TestRequest: APIKit.Request {
                 mimeType: "denwaNeko.jpeg",
                 fileName: "image/jpeg"
             ),
-            .init(data: message, name: "message")
+            .init(data: message, name: "message"),
         ]
         return MultipartFormDataBodyParameters(parts: parts)
     }
