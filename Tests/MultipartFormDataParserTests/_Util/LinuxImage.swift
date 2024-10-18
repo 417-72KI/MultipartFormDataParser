@@ -21,5 +21,4 @@ struct Image: Hashable {
         self.data = data
     }
 }
-
 #endif
