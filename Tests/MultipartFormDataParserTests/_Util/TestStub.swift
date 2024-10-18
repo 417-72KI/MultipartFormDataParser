@@ -42,7 +42,7 @@ private let uploadTestStubResponse: StubURLProtocol.RequestHandler = { request i
         guard let _ = Image(data: denwaNeko.data) else { return errorResponse("Unexpected denwaNeko") }
         guard message.string == "Hello world!" else { return errorResponse("Unexpected message: \(message)") }
         return (
-            #"{"status": 200}"#.data(using: .utf8),
+            Data(#"{"status": 200}"#.utf8),
             HTTPURLResponse(
                 url: request.url!,
                 statusCode: 200,

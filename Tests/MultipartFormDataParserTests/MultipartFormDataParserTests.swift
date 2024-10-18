@@ -38,7 +38,7 @@ final class MultipartFormDataParserTests: XCTestCase {
         let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
         let data = try MultipartFormData.parse(from: request)
         XCTAssertEqual(["genbaNeko", "denwaNeko", "message"], data.map(\.name))
-        XCTAssertEqual([genbaNeko, denwaNeko, "Hello world!".data(using: .utf8)], data.map(\.data))
+        XCTAssertEqual([genbaNeko, denwaNeko, Data("Hello world!".utf8)], data.map(\.data))
     }
 
     // MARK: Failure
