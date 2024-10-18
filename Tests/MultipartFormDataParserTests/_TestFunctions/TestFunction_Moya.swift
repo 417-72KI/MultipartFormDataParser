@@ -45,12 +45,14 @@ extension XCTestCase {
         case let .failure(error):
             if retryCount > 0 {
                 print("retry: \(retryCount)")
-                return try uploadWithMoya(genbaNeko: genbaNeko,
-                                          denwaNeko: denwaNeko,
-                                          message: message,
-                                          retryCount: retryCount - 1,
-                                          file: file,
-                                          line: line)
+                return try uploadWithMoya(
+                    genbaNeko: genbaNeko,
+                    denwaNeko: denwaNeko,
+                    message: message,
+                    retryCount: retryCount - 1,
+                    file: file,
+                    line: line
+                )
             }
             throw error
         }

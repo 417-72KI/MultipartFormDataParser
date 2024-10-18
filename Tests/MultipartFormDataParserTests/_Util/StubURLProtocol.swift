@@ -20,9 +20,11 @@ final class StubURLProtocol: URLProtocol {
         guard let requestHandler = Self.requestHandler else { return }
         do {
             let (data, response) = try requestHandler(request)
-            client?.urlProtocol(self,
-                                didReceive: response,
-                                cacheStoragePolicy: .notAllowed)
+            client?.urlProtocol(
+                self,
+                didReceive: response,
+                cacheStoragePolicy: .notAllowed
+            )
             if let data {
                 client?.urlProtocol(self, didLoad: data)
             }

@@ -122,9 +122,11 @@ final class MultipartFormDataParserTests: XCTestCase {
         let message = Data("Hello world!".utf8)
 
         try runActivity(named: "request") {
-            let request = try requestWithAPIKit(genbaNeko: genbaNeko,
-                                                denwaNeko: denwaNeko,
-                                                message: message)
+            let request = try requestWithAPIKit(
+                genbaNeko: genbaNeko,
+                denwaNeko: denwaNeko,
+                message: message
+            )
             let data = try MultipartFormData.parse(from: request)
             XCTAssertEqual(data.element(forName: "genbaNeko")?.data, genbaNeko)
             XCTAssertEqual(data.element(forName: "denwaNeko")?.data, denwaNeko)
