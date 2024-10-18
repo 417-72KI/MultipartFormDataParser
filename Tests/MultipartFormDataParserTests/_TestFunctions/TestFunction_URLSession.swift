@@ -25,12 +25,14 @@ extension XCTestCase {
             return try JSONDecoder().decode(TestEntity.self, from: data)
         } catch {
             guard retryCount > 0 else { throw error }
-            return try await uploadURLSessionData(genbaNeko: genbaNeko,
-                                                  denwaNeko: denwaNeko,
-                                                  message: message,
-                                                  retryCount: retryCount - 1,
-                                                  file: file,
-                                                  line: line)
+            return try await uploadURLSessionData(
+                genbaNeko: genbaNeko,
+                denwaNeko: denwaNeko,
+                message: message,
+                retryCount: retryCount - 1,
+                file: file,
+                line: line
+            )
         }
     }
 
@@ -46,21 +48,25 @@ extension XCTestCase {
         var request = URLRequest(url: URL(string: "https://localhost/upload")!)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        let requestBody = createBody(boundary: boundary,
-                                     genbaNeko: genbaNeko,
-                                     denwaNeko: denwaNeko,
-                                     message: message)
+        let requestBody = createBody(
+            boundary: boundary,
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            message: message
+        )
         do {
             let (data, _) = try await session.upload(for: request, from: requestBody)
             return try JSONDecoder().decode(TestEntity.self, from: data)
         } catch {
             guard retryCount > 0 else { throw error }
-            return try await uploadURLSessionUpload(genbaNeko: genbaNeko,
-                                                    denwaNeko: denwaNeko,
-                                                    message: message,
-                                                    retryCount: retryCount - 1,
-                                                    file: file,
-                                                    line: line)
+            return try await uploadURLSessionUpload(
+                genbaNeko: genbaNeko,
+                denwaNeko: denwaNeko,
+                message: message,
+                retryCount: retryCount - 1,
+                file: file,
+                line: line
+            )
         }
     }
 }
@@ -87,10 +93,12 @@ extension XCTestCase {
     }
 }
 
-private func createBody(boundary: String,
-                        genbaNeko: Data,
-                        denwaNeko: Data,
-                        message: Data) -> Data {
+private func createBody(
+    boundary: String,
+    genbaNeko: Data,
+    denwaNeko: Data,
+    message: Data
+) -> Data {
     [
         Data("--\(boundary)\r\n".utf8),
         Data("Content-Disposition: form-data; name=\"genbaNeko\"; filename=\"genbaNeko\"\r\n".utf8),

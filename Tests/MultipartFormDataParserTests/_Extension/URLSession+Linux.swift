@@ -7,11 +7,11 @@ extension URLSession {
     public func data(for request: URLRequest, delegate: (any URLSessionTaskDelegate)? = nil) async throws -> (Data, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
             let task = dataTask(with: request) { data, res, err in
-                if let err = err {
+                if let err {
                     return continuation.resume(throwing: err)
                 }
-                if let data = data,
-                   let res = res {
+                if let data,
+                   let res {
                     return continuation.resume(returning: (data, res))
                 }
             }
@@ -27,11 +27,11 @@ extension URLSession {
     public func upload(for request: URLRequest, fromFile fileURL: URL, delegate: (any URLSessionTaskDelegate)? = nil) async throws -> (Data, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
             let task = uploadTask(with: request, fromFile: fileURL) { data, res, err in
-                if let err = err {
+                if let err {
                     return continuation.resume(throwing: err)
                 }
-                if let data = data,
-                   let res = res {
+                if let data,
+                   let res {
                     return continuation.resume(returning: (data, res))
                 }
             }
@@ -43,11 +43,11 @@ extension URLSession {
     public func upload(for request: URLRequest, from bodyData: Data, delegate: (any URLSessionTaskDelegate)? = nil) async throws -> (Data, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
             let task = uploadTask(with: request, from: bodyData) { data, res, err in
-                if let err = err {
+                if let err {
                     return continuation.resume(throwing: err)
                 }
-                if let data = data,
-                   let res = res {
+                if let data,
+                   let res {
                     return continuation.resume(returning: (data, res))
                 }
             }

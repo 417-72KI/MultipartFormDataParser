@@ -21,14 +21,17 @@ func clearStubs() {
     StubURLProtocol.requestHandler = nil
 }
 
+// swiftlint:disable:next closure_body_length
 private let uploadTestStubResponse: StubURLProtocol.RequestHandler = { request in
     let errorResponse = { (message: String) -> (Data?, HTTPURLResponse) in
         (
             Data(#"{"status": 403, "error": "\#(message)"}"#.utf8),
-            HTTPURLResponse(url: request.url!,
-                            statusCode: 403,
-                            httpVersion: "HTTP/2",
-                            headerFields: ["Content-Type": "application/json"])!
+            HTTPURLResponse(
+                url: request.url!,
+                statusCode: 403,
+                httpVersion: "HTTP/2",
+                headerFields: ["Content-Type": "application/json"]
+            )!
         )
     }
     do {
@@ -40,11 +43,13 @@ private let uploadTestStubResponse: StubURLProtocol.RequestHandler = { request i
         guard let _ = Image(data: denwaNeko.data) else { return errorResponse("Unexpected denwaNeko") }
         guard message.string == "Hello world!" else { return errorResponse("Unexpected message: \(message)") }
         return (
-            #"{"status": 200}"#.data(using: .utf8),
-            HTTPURLResponse(url: request.url!,
-                            statusCode: 200,
-                            httpVersion: "HTTP/2",
-                            headerFields: ["Content-Type": "application/json"])!
+            Data(#"{"status": 200}"#.utf8),
+            HTTPURLResponse(
+                url: request.url!,
+                statusCode: 200,
+                httpVersion: "HTTP/2",
+                headerFields: ["Content-Type": "application/json"]
+            )!
         )
     } catch {
         return errorResponse(error.localizedDescription)

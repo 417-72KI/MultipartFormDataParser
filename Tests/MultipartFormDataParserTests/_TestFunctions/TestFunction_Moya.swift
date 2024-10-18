@@ -45,15 +45,16 @@ extension XCTestCase {
         case let .failure(error):
             if retryCount > 0 {
                 print("retry: \(retryCount)")
-                return try uploadWithMoya(genbaNeko: genbaNeko,
-                                          denwaNeko: denwaNeko,
-                                          message: message,
-                                          retryCount: retryCount - 1,
-                                          file: file,
-                                          line: line)
-            } else {
-                throw error
+                return try uploadWithMoya(
+                    genbaNeko: genbaNeko,
+                    denwaNeko: denwaNeko,
+                    message: message,
+                    retryCount: retryCount - 1,
+                    file: file,
+                    line: line
+                )
             }
+            throw error
         }
     }
 }
@@ -69,7 +70,7 @@ private struct TestTarget: TargetType {
     var baseURL: URL { URL(string: "https://localhost")! }
     var path: String { "/upload" }
     var method: Moya.Method { .post }
-    var headers: [String : String]? { [:] }
+    var headers: [String: String]? { [:] }
 }
 
 extension TestTarget {
@@ -77,7 +78,7 @@ extension TestTarget {
         let formData: [Moya.MultipartFormData] = [
             Moya.MultipartFormData(provider: .data(genbaNeko), name: "genbaNeko", fileName: "genbaNeko.jpeg", mimeType: "image/jpeg"),
             Moya.MultipartFormData(provider: .data(denwaNeko), name: "denwaNeko", fileName: "denwaNeko.jpeg", mimeType: "image/jpeg"),
-            Moya.MultipartFormData(provider: .data(message), name: "message")
+            Moya.MultipartFormData(provider: .data(message), name: "message"),
         ]
         return .uploadMultipart(formData)
     }
