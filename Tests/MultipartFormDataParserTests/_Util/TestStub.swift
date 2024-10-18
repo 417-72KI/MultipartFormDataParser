@@ -21,6 +21,7 @@ func clearStubs() {
     StubURLProtocol.requestHandler = nil
 }
 
+// swiftlint:disable:next closure_body_length
 private let uploadTestStubResponse: StubURLProtocol.RequestHandler = { request in
     let errorResponse = { (message: String) -> (Data?, HTTPURLResponse) in
         (
