@@ -5,8 +5,10 @@ excluded:
   - .build
 opt_in_rules: [all]
 disabled_rules:
+  - anonymous_argument_in_multiline_closure
   - conditional_returns_on_newline
   - contrasted_opening_brace
+  - discouraged_optional_collection
   - explicit_acl
   - explicit_enum_raw_value
   - explicit_top_level_acl
@@ -18,16 +20,20 @@ disabled_rules:
   - force_try
   - force_unwrapping
   - function_default_parameter_at_end
+  - indentation_width
   - lower_acl_than_parent
   - missing_docs
   - no_extension_access_modifier
   - no_grouping_extension
+  - no_magic_numbers
+  - non_overridable_class_declaration
   - object_literal
   - prefer_nimble
   - prefixed_toplevel_constant
   - prohibited_interface_builder
   - required_deinit
   - sorted_enum_cases
+  - static_over_final_class
   - strict_fileprivate
   - strong_iboutlet
   - switch_case_on_newline
@@ -43,21 +49,21 @@ line_length:
   ignores_interpolated_strings: true
 file_length:
   ignore_comment_only_lines: true
-cyclomatic_complexity:
-  ignores_case_statements: true
-explicit_type_interface:
-  allow_redundancy: true
-  excluded:
-    - local
-nesting:
-  type_level: 2
 attributes:
   always_on_same_line:
     - '@IBAction'
     - '@NSManaged'
     - '@objc'
+cyclomatic_complexity:
+  ignores_case_statements: true
+identifier_name:
+  excluded:
+    - ^i$
+    - ^id$
 multiline_arguments:
   only_enforce_after_first_closure_on_first_line: true
+nesting:
+  type_level: 2
 number_separator:
   minimum_length: 5
 trailing_comma:

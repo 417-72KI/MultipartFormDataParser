@@ -1,5 +1,4 @@
 #if os(Linux)
-// swiftlint:disable no_magic_numbers
 import Foundation
 
 struct Image: Hashable {
@@ -22,6 +21,4 @@ struct Image: Hashable {
         self.data = data
     }
 }
-
-// swiftlint:enable no_magic_numbers
 #endif
