@@ -94,7 +94,7 @@ jobs:
       - name: Merge xcresult files
         run:
           xcrun xcresulttool merge test_output/**/*.xcresult --output-path test_output/TestResults.xcresult
-      - uses: kishikawakatsumi/xcresulttool@v1
+      - uses: kishikawakatsumi/xcresulttool@2b37f116695328d5e503ac8dadca0f1545a51da4 # v1
         if: success() || failure()
         with:
           path: test_output/TestResults.xcresult
