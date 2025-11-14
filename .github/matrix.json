@@ -1,16 +1,16 @@
 {
     "xcode_version": [
-        "15.2",
-        "15.4"
+        "16.4"
     ],
     "swift_version": [
-        "5.9",
-        "5.10"
+        "5.10",
+        "6.0",
+        "6.1"
     ],
     "platform": [
         "platform=macOS",
         "platform=macOS,variant=Mac Catalyst",
-        "platform=iOS Simulator,name=iPhone 15 Pro",
+        "platform=iOS Simulator,name=iPhone 16 Pro",
         "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)"
     ]
 }
