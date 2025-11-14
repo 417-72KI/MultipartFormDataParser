@@ -47,24 +47,15 @@ extension MultipartFormData.Element {
             element.fileName = String(filename)
         }
         for line in data.dropFirst() {
-            guard let string = String(data: line, encoding: .utf8) else {
-                element.data.append(line)
-                element.data.append(Data("\r\n".utf8))
-                continue
-            }
-            if let mimeTypeMatches = matchMimeType(in: string) {
+            if let string = String(data: line, encoding: .utf8),
+               let mimeTypeMatches = matchMimeType(in: string) {
                 element.mimeType = String(mimeTypeMatches.output.mimetype)
                 continue
             }
-            if element.data.isEmpty {
-                element.data = line
-            } else {
-                element.data.append(line)
+            if !element.data.isEmpty {
                 element.data.append(Data("\r\n".utf8))
             }
-        }
-        if element.data.suffix(2) == Data("\r\n".utf8) {
-            element.data.removeLast(2)
+            element.data.append(line)
         }
         return element
     }
