@@ -14,12 +14,18 @@ extension XCTestCase {
     func uploadURLSessionData(
         genbaNeko: Data,
         denwaNeko: Data,
+        pdf: Data,
         message: Data,
         retryCount: UInt = 3,
         file: StaticString = #filePath,
         line: UInt = #line
     ) async throws -> TestEntity {
-        let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let request = createRequest(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            pdf: pdf,
+            message: message
+        )
         do {
             let (data, _) = try await session.data(for: request)
             return try JSONDecoder().decode(TestEntity.self, from: data)
@@ -28,6 +34,7 @@ extension XCTestCase {
             return try await uploadURLSessionData(
                 genbaNeko: genbaNeko,
                 denwaNeko: denwaNeko,
+                pdf: pdf,
                 message: message,
                 retryCount: retryCount - 1,
                 file: file,
@@ -39,6 +46,7 @@ extension XCTestCase {
     func uploadURLSessionUpload(
         genbaNeko: Data,
         denwaNeko: Data,
+        pdf: Data,
         message: Data,
         retryCount: UInt = 3,
         file: StaticString = #filePath,
@@ -52,6 +60,7 @@ extension XCTestCase {
             boundary: boundary,
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
+            pdf: pdf,
             message: message
         )
         do {
@@ -62,6 +71,7 @@ extension XCTestCase {
             return try await uploadURLSessionUpload(
                 genbaNeko: genbaNeko,
                 denwaNeko: denwaNeko,
+                pdf: pdf,
                 message: message,
                 retryCount: retryCount - 1,
                 file: file,
@@ -75,6 +85,7 @@ extension XCTestCase {
     func createRequest(
         genbaNeko: Data,
         denwaNeko: Data,
+        pdf: Data,
         message: Data,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -87,6 +98,7 @@ extension XCTestCase {
             boundary: boundary,
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
+            pdf: pdf,
             message: message
         )
         return request
@@ -97,6 +109,7 @@ private func createBody(
     boundary: String,
     genbaNeko: Data,
     denwaNeko: Data,
+    pdf: Data,
     message: Data
 ) -> Data {
     [
@@ -111,6 +124,12 @@ private func createBody(
         Data("Content-Type: image/jpeg\r\n".utf8),
         Data("\r\n".utf8),
         denwaNeko,
+        Data("\r\n".utf8),
+        Data("--\(boundary)\r\n".utf8),
+        Data("Content-Disposition: form-data; name=\"pdf\"; filename=\"example.pdf\"\r\n".utf8),
+        Data("Content-Type: application/pdf\r\n".utf8),
+        Data("\r\n".utf8),
+        pdf,
         Data("\r\n".utf8),
         Data("--\(boundary)\r\n".utf8),
         Data("Content-Disposition: form-data; name=\"message\"\r\n".utf8),

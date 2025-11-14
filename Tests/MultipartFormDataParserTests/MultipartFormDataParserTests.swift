@@ -24,7 +24,12 @@ final class MultipartFormDataParserTests: XCTestCase {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = Data("Hello world!".utf8)
-        let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let request = createRequest(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            pdf: pdf,
+            message: message
+        )
         let data = try MultipartFormData.parse(from: request)
         XCTAssertEqual(data.element(forName: "genbaNeko")?.data, genbaNeko)
         XCTAssertEqual(data.element(forName: "denwaNeko")?.data, denwaNeko)
@@ -35,10 +40,15 @@ final class MultipartFormDataParserTests: XCTestCase {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = Data("Hello world!".utf8)
-        let request = createRequest(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let request = createRequest(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            pdf: pdf,
+            message: message
+        )
         let data = try MultipartFormData.parse(from: request)
-        XCTAssertEqual(["genbaNeko", "denwaNeko", "message"], data.map(\.name))
-        XCTAssertEqual([genbaNeko, denwaNeko, Data("Hello world!".utf8)], data.map(\.data))
+        XCTAssertEqual(["genbaNeko", "denwaNeko", "pdf", "message"], data.map(\.name))
+        XCTAssertEqual([genbaNeko, denwaNeko, pdf, Data("Hello world!".utf8)], data.map(\.data))
     }
 
     // MARK: Failure
@@ -100,7 +110,13 @@ final class MultipartFormDataParserTests: XCTestCase {
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = Data("Hello world!".utf8)
 
-        let result = try XCTUnwrap(uploadWithAlamoFire(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message))
+        let result = try XCTUnwrap(
+            uploadWithAlamoFire(
+                genbaNeko: genbaNeko,
+                denwaNeko: denwaNeko,
+                message: message
+            )
+        )
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
@@ -125,6 +141,7 @@ final class MultipartFormDataParserTests: XCTestCase {
             let request = try requestWithAPIKit(
                 genbaNeko: genbaNeko,
                 denwaNeko: denwaNeko,
+                pdf: pdf,
                 message: message
             )
             let data = try MultipartFormData.parse(from: request)
@@ -134,7 +151,14 @@ final class MultipartFormDataParserTests: XCTestCase {
         }
 
         try runActivity(named: "stub") {
-            let result = try XCTUnwrap(uploadWithAPIKit(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message))
+            let result = try XCTUnwrap(
+                uploadWithAPIKit(
+                    genbaNeko: genbaNeko,
+                    denwaNeko: denwaNeko,
+                    pdf: pdf,
+                    message: message
+                )
+            )
             XCTAssertEqual(result.status, 200)
             XCTAssertNil(result.error)
         }
@@ -150,7 +174,12 @@ final class MultipartFormDataParserTests: XCTestCase {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = Data("Hello world!".utf8)
-        let result = try await uploadURLSessionUpload(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let result = try await uploadURLSessionUpload(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            pdf: pdf,
+            message: message
+        )
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
@@ -159,7 +188,12 @@ final class MultipartFormDataParserTests: XCTestCase {
         let genbaNeko = try XCTUnwrap(genbaNeko)
         let denwaNeko = try XCTUnwrap(denwaNeko)
         let message = Data("Hello world!".utf8)
-        let result = try await uploadURLSessionData(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
+        let result = try await uploadURLSessionData(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            pdf: pdf,
+            message: message
+        )
         XCTAssertEqual(result.status, 200)
         XCTAssertNil(result.error)
     }
@@ -193,4 +227,6 @@ private extension MultipartFormDataParserTests {
         return TestResource.denwaNeko
         #endif
     }
+
+    var pdf: Data { TestResource.pdf }
 }
