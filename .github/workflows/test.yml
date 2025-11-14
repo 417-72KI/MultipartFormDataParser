@@ -94,7 +94,7 @@ jobs:
       - name: Merge xcresult files
         run:
           xcrun xcresulttool merge test_output/**/*.xcresult --output-path test_output/TestResults.xcresult
-      - uses: kishikawakatsumi/xcresulttool@v1
+      - uses: slidoapp/xcresulttool@v3.1.0
         if: success() || failure()
         with:
           path: test_output/TestResults.xcresult
