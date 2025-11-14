@@ -98,13 +98,13 @@ private struct TestRequest: APIKit.Request {
                 data: genbaNeko,
                 name: "genbaNeko",
                 mimeType: "image/jpeg",
-                fileName: "genbaNeko.jpeg",
+                fileName: "genbaNeko.jpeg"
             ),
             .init(
                 data: denwaNeko,
                 name: "denwaNeko",
                 mimeType: "image/jpeg",
-                fileName: "denwaNeko.jpeg",
+                fileName: "denwaNeko.jpeg"
             ),
             .init(
                 data: pdf,
