@@ -15,6 +15,7 @@ extension XCTestCase {
     func requestWithAPIKit(
         genbaNeko: Data,
         denwaNeko: Data,
+        pdf: Data,
         message: Data,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -22,6 +23,7 @@ extension XCTestCase {
         try TestRequest(
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
+            pdf: pdf,
             message: message,
             file: file,
             line: line
@@ -31,6 +33,7 @@ extension XCTestCase {
     func uploadWithAPIKit(
         genbaNeko: Data,
         denwaNeko: Data,
+        pdf: Data,
         message: Data,
         retryCount: UInt = 3,
         file: StaticString = #filePath,
@@ -40,6 +43,7 @@ extension XCTestCase {
         let request = TestRequest(
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
+            pdf: pdf,
             message: message,
             file: file,
             line: line
@@ -58,7 +62,15 @@ extension XCTestCase {
         case let .failure(error):
             if retryCount > 0 {
                 print("retry: \(retryCount)")
-                return try uploadWithAPIKit(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message, retryCount: retryCount - 1, file: file, line: line)
+                return try uploadWithAPIKit(
+                    genbaNeko: genbaNeko,
+                    denwaNeko: denwaNeko,
+                    pdf: pdf,
+                    message: message,
+                    retryCount: retryCount - 1,
+                    file: file,
+                    line: line
+                )
             }
             throw error
         }
@@ -74,6 +86,7 @@ private struct TestRequest: APIKit.Request {
 
     var genbaNeko: Data
     var denwaNeko: Data
+    var pdf: Data
     var message: Data
 
     var file: StaticString
@@ -92,6 +105,12 @@ private struct TestRequest: APIKit.Request {
                 name: "denwaNeko",
                 mimeType: "denwaNeko.jpeg",
                 fileName: "image/jpeg"
+            ),
+            .init(
+                data: pdf,
+                name: "pdf",
+                mimeType: "application/pdf",
+                fileName: "example.pdf"
             ),
             .init(data: message, name: "message"),
         ]
