@@ -35,29 +35,49 @@ public extension MultipartFormData.Element {
 }
 
 extension MultipartFormData.Element {
-    static func from(_ data: [Data]) -> Self {
+    static func from(_ data: [Data]) -> Self? {
         var element = Self(name: "", data: .init(), fileName: nil, mimeType: nil)
-        for line in data {
+        guard let firstLine = data.first
+            .flatMap({ String(data: $0, encoding: .utf8) }),
+              let contentDispositionMatches = matchContentDisposition(in: firstLine) else {
+            return nil
+        }
+        element.name = String(contentDispositionMatches.output.name)
+        if let filename = contentDispositionMatches.output.filename {
+            element.fileName = String(filename)
+        }
+        for line in data.dropFirst() {
             guard let string = String(data: line, encoding: .utf8) else {
-                element.data = line
+                element.data.append(line)
+                element.data.append(Data("\r\n".utf8))
                 continue
             }
-
-            if let contentDispositionMatches = try! #/Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?/#.firstMatch(in: string) {
-                element.name = String(contentDispositionMatches.output.name)
-                if let filename = contentDispositionMatches.output.filename {
-                    element.fileName = String(filename)
-                }
-                continue
-            }
-            if let mimeTypeMatches = try! #/Content-Type: (?<mimetype>.*/.*)/#.firstMatch(in: string) {
+            if let mimeTypeMatches = matchMimeType(in: string) {
                 element.mimeType = String(mimeTypeMatches.output.mimetype)
                 continue
             }
             if element.data.isEmpty {
                 element.data = line
+            } else {
+                element.data.append(line)
+                element.data.append(Data("\r\n".utf8))
             }
         }
+        if element.data.suffix(2) == Data("\r\n".utf8) {
+            element.data.removeLast(2)
+        }
         return element
+    }
+}
+
+private extension MultipartFormData.Element {
+    static func matchContentDisposition(in string: String) -> Regex<(Substring, name: Substring, Substring?, filename: Substring?)>.Match? {
+        try! #/Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?/#
+            .firstMatch(in: string)
+    }
+
+    static func matchMimeType(in string: String) -> Regex<(Substring, mimetype: Substring)>.Match? {
+        try! #/Content-Type: (?<mimetype>.*/.*)/#
+            .firstMatch(in: string)
     }
 }
