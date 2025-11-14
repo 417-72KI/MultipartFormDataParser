@@ -58,16 +58,15 @@ if isDevelop {
 // MARK: - Upcoming feature flags for Swift 6
 package.targets.forEach {
     $0.swiftSettings = [
-        // .forwardTrailingClosures,
+        .forwardTrailingClosures,
         .existentialAny,
         .bareSlashRegexLiterals,
         .conciseMagicFile,
         .importObjcForwardDeclarations,
         .disableOutwardActorInference,
-        // TODO: enable when 5.9 dropped
-        // .deprecateApplicationMain,
-        // .isolatedDefaultValues,
-        // .globalConcurrency,
+        .deprecateApplicationMain,
+        .isolatedDefaultValues,
+        .globalConcurrency,
     ]
 }
 
