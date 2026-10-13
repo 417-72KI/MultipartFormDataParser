@@ -1,0 +1,151 @@
+name: Pull Request
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    paths:
+      - .github/workflows/pr.yml
+      - .github/create-matrix.sh
+      - .github/matrix.yml
+      - Package.*
+      - '**/*.swift'
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+jobs:
+  extract-matrix:
+    name: Create matrix
+    runs-on: ubuntu-latest
+    outputs:
+      macos-versions: ${{ steps.extract-matrix.outputs.macos-versions }}
+      linux-swift-versions: ${{ steps.extract-matrix.outputs.linux-swift-versions }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - id: extract-matrix
+        run: |
+          echo "macos-versions=$(.github/create-matrix.sh macOS)" >> $GITHUB_OUTPUT
+          echo "linux-swift-versions=$(.github/create-matrix.sh Linux)" >> $GITHUB_OUTPUT
+  test-macos:
+    name: Test(macOS)
+    needs: extract-matrix
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.extract-matrix.outputs.macos-versions) }}
+      fail-fast: false
+    runs-on: ${{ matrix.runner }}
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - id: create-destination-key
+        name: Create destination key for cache
+        run: echo "destination-key=$(echo "xcode_${{ matrix.xcode }}-${{ matrix.destination }}" | sed 's/[, ]/_/g')" >> $GITHUB_OUTPUT
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: |
+            .build/SourcePackages
+          key: ${{ runner.os }}-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-${{ hashFiles('Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.xcode }}-${{ steps.create-destination-key.outputs.destination-key }}-
+            ${{ runner.os }}-${{ matrix.xcode }}-
+      - name: Enable macro and plugin
+        run: |
+          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES
+      - name: List available simulators
+        run: |
+          xcrun simctl list
+      - name: Set up test package when repository is a template
+        if: ${{ github.event.repository.is_template }}
+        run: swift package init
+      - name: Preboot iPhone 18 Pro simulator # Ref: https://github.com/actions/runner-images/issues/12777
+        if: ${{ startsWith(matrix.xcode, '27') && endsWith(matrix.destination, 'name=iPhone 18 Pro') }}
+        run: |
+          xcrun simctl boot "iPhone 18 Pro" || true
+          xcrun simctl bootstatus "iPhone 18 Pro"
+      - name: test
+        run: |
+          defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
+          set -o pipefail && \
+          xcrun xcodebuild \
+            -enableCodeCoverage YES \
+            -scheme "$(xcodebuild -list -json | jq -rc '.workspace.schemes[0] // .workspace.name')" \
+            -destination "${{ matrix.destination }}" \
+            -derivedDataPath '.build' \
+            -resultBundlePath 'test_output/TestResult.xcresult' \
+            clean test | xcbeautify
+      - name: Upload test result
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: success() || failure()
+        with:
+          name: ${{ steps.create-destination-key.outputs.destination-key }}
+          path: test_output
+          if-no-files-found: error
+          retention-days: 1
+  merge-xcresult:
+    name: Merge xcresult
+    needs: test-macos
+    if: always() && !cancelled()
+    runs-on: macos-latest
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          path: test_output
+      - name: Merge
+        run: |
+          xcrun xcresulttool merge --output-path 'TestResult.xcresult' test_output/**/TestResult.xcresult
+          xcrun xcresulttool get test-results tests --path 'TestResult.xcresult' > 'result.json'
+      - name: Upload test result
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: merged-test-result
+          path: |
+            TestResult.xcresult
+            result.json
+          if-no-files-found: error
+          retention-days: 30
+  test-linux:
+    name: Test(Linux)
+    needs: extract-matrix
+    runs-on: ubuntu-latest
+    container: swift:${{ matrix.swift }}
+    strategy:
+      matrix:
+        swift: ${{ fromJson(needs.extract-matrix.outputs.linux-swift-versions) }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: |
+            .build/artifacts
+            .build/checkouts
+            .build/repositories
+          key: ${{ runner.os }}-${{ matrix.swift }}-${{ hashFiles('Package.swift') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.swift }}-
+      - name: Set up test package when repository is a template
+        if: ${{ github.event.repository.is_template }}
+        run: swift package init
+      - name: test
+        run: swift test
+  danger:
+    name: Danger
+    needs: merge-xcresult
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+      issues: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: merged-test-result
+          path: test_output
+      - name: Run Danger
+        uses: 417-72KI/danger-swiftlint@e0eee1ddb70909a05eb326714b269d7499d28ab8 # v6.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
