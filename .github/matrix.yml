@@ -1,0 +1,33 @@
+macos_runners:
+  xcode-27: # ref: https://github.com/actions/runner-images/blob/main/images/macos/xcode-27-arm64-Readme.md
+    xcode:
+      "27.0": # Swift 6.4
+        destination:
+          - platform=macOS
+          - platform=iOS Simulator,name=iPhone 18 Pro
+          - platform=tvOS Simulator,name=Apple TV 4K (3rd generation)
+  macos-26: # ref: https://github.com/actions/runner-images/blob/main/images/macos/macos-26-arm64-Readme.md
+    xcode:
+      "26.6": # Swift 6.3
+        destination:
+          - platform=macOS
+          - platform=iOS Simulator,name=iPhone 17 Pro
+          - platform=tvOS Simulator,name=Apple TV 4K (3rd generation)
+      "26.3": # Swift 6.2
+        destination:
+          - platform=macOS
+          - platform=iOS Simulator,name=iPhone 17 Pro
+          - platform=tvOS Simulator,name=Apple TV 4K (3rd generation)
+  macos-15: # ref: https://github.com/actions/runner-images/blob/main/images/macos/macos-15-arm64-Readme.md
+    xcode:
+      "16.4": # Swift 6.1
+        destination:
+          - platform=macOS
+          - platform=iOS Simulator,name=iPhone 16 Pro
+          - platform=tvOS Simulator,name=Apple TV 4K (3rd generation)
+linux_runner:
+  swift_versions:
+    - "6.4"
+    - "6.3"
+    - "6.2"
+    - "6.1"
