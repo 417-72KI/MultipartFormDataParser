@@ -112,30 +112,39 @@ private func createBody(
     pdf: Data,
     message: Data
 ) -> Data {
-    [
+    let genbaNekoBlock = [
         Data("--\(boundary)\r\n".utf8),
         Data("Content-Disposition: form-data; name=\"genbaNeko\"; filename=\"genbaNeko\"\r\n".utf8),
         Data("Content-Type: image/jpeg\r\n".utf8),
         Data("\r\n".utf8),
         genbaNeko,
         Data("\r\n".utf8),
+    ]
+    let denwaNekoBlock = [
         Data("--\(boundary)\r\n".utf8),
         Data("Content-Disposition: form-data; name=\"denwaNeko\"; filename=\"denwaNeko\"\r\n".utf8),
         Data("Content-Type: image/jpeg\r\n".utf8),
         Data("\r\n".utf8),
         denwaNeko,
         Data("\r\n".utf8),
+    ]
+    let pdfBlock = [
         Data("--\(boundary)\r\n".utf8),
         Data("Content-Disposition: form-data; name=\"pdf\"; filename=\"example.pdf\"\r\n".utf8),
         Data("Content-Type: application/pdf\r\n".utf8),
         Data("\r\n".utf8),
         pdf,
         Data("\r\n".utf8),
+    ]
+    let messageBlock = [
         Data("--\(boundary)\r\n".utf8),
         Data("Content-Disposition: form-data; name=\"message\"\r\n".utf8),
         Data("\r\n".utf8),
         message,
         Data("\r\n".utf8),
+    ]
+    let footer = [
         Data("--\(boundary)--\r\n".utf8),
-    ].reduce(Data(), +)
+    ]
+    return (genbaNekoBlock + denwaNekoBlock + pdfBlock + messageBlock + footer).reduce(Data(), +)
 }
