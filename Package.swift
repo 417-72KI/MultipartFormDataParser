@@ -4,13 +4,6 @@
 import PackageDescription
 
 let isDevelop = true
-let isApplePlatform: Bool = {
-    #if canImport(Darwin)
-    true
-    #else
-    false
-    #endif
-}()
 
 let package = Package(
     name: "MultipartFormDataParser",
@@ -33,26 +26,32 @@ let package = Package(
 
 // MARK: - develop
 if isDevelop {
-    if isApplePlatform {
-        package.dependencies.append(contentsOf: [
-            .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.65.1"),
-            .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.12.0"),
-            .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
-        ])
-        package.targets
-            .filter(\.isTest)
-            .forEach {
-                $0.dependencies.append(contentsOf: [
-                    "Alamofire",
-                    "APIKit",
-                ])
-            }
-        package.targets.forEach {
-            if $0.plugins == nil {
-                $0.plugins = []
-            }
-            $0.plugins?.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
+    package.dependencies.append(contentsOf: [
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.65.1"),
+        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.12.0"),
+        .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
+    ])
+    package.targets
+        .filter(\.isTest)
+        .forEach {
+            $0.dependencies.append(contentsOf: [
+                .product(
+                    name: "APIKit",
+                    package: "APIKit",
+                    condition: .when(platforms: [.macOS, .macCatalyst, .iOS, .tvOS]),
+                ),
+                .product(
+                    name: "Alamofire",
+                    package: "Alamofire",
+                    condition: .when(platforms: [.macOS, .macCatalyst, .iOS, .tvOS]),
+                )
+            ])
         }
+    package.targets.forEach {
+        if $0.plugins == nil {
+            $0.plugins = []
+        }
+        $0.plugins?.append(.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"))
     }
 }
 
