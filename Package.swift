@@ -75,8 +75,8 @@ package.targets.forEach {
         .nonfrozenEnumExhaustivity,
         .globalActorIsolatedTypesUsability,
         .existentialAny,
-        // .internalImportsByDefault,
-        // .memberImportVisibility,
+        .internalImportsByDefault,
+        .memberImportVisibility,
     ]
 }
 

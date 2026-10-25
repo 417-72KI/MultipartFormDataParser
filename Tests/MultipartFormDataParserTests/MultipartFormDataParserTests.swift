@@ -12,6 +12,10 @@ import UIKit
 import Cocoa
 #endif
 
+#if canImport(APIKit)
+import APIKit
+#endif
+
 private var isLinux: Bool {
     #if os(Linux)
     true
