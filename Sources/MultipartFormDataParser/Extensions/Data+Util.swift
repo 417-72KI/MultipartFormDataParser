@@ -7,7 +7,7 @@ extension Data {
 extension Data {
     func split(separator: [UInt8]) -> [Data] {
         let bytes = self.bytes
-        var result = [Data]()
+        var result = [Self]()
         var position = 0
         for i in 0..<count - 1 {
             let current = Array(bytes[i..<(i + separator.count)])

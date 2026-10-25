@@ -10,7 +10,7 @@ protocol StubResponseProvider {
 
 extension URLSessionConfiguration {
     static func stubbed<S: StubResponseProvider>(for type: S.Type) -> URLSessionConfiguration {
-        let configuration = URLSessionConfiguration.ephemeral
+        let configuration = Self.ephemeral
         configuration.protocolClasses = [StubURLProtocol<S>.self]
         return configuration
     }

@@ -15,7 +15,7 @@ func requestWithAPIKit(
     pdf: Data,
     message: Data,
     sourceLocation: SourceLocation = #_sourceLocation
-) throws -> TestRequest {
+) -> TestRequest {
     TestRequest(
         genbaNeko: genbaNeko,
         denwaNeko: denwaNeko,

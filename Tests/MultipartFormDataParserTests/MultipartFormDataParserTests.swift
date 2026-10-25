@@ -133,7 +133,7 @@ extension MultipartFormDataParserTests {
         let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
 
-        let request = try requestWithAPIKit(
+        let request = requestWithAPIKit(
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
             pdf: pdf,

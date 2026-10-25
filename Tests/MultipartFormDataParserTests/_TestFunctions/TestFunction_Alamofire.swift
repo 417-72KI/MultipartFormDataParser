@@ -44,7 +44,12 @@ func uploadWithAlamoFire(
 private final class Interceptor: RequestInterceptor {
     private let lock = NSLock()
 
-    func retry(_ request: Request, for session: Session, dueTo error: any Error, completion: @escaping (RetryResult) -> Void) {
+    func retry(
+        _ request: Request,
+        for session: Session,
+        dueTo error: any Error,
+        completion: (RetryResult) -> Void
+    ) {
         lock.lock(); defer { lock.unlock() }
 
         if request.retryCount < 3 {
