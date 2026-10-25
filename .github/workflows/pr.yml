@@ -125,6 +125,15 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.swift }}-${{ hashFiles('Package.swift') }}
           restore-keys: |
             ${{ runner.os }}-${{ matrix.swift }}-
+      - name: Set up libxml if needed
+        run: |
+          # ref: https://discourse.ubuntu.com/t/psa-ubuntu-25-10-features-a-libxml2-version-with-api-breaking-changes/71783/2
+          libxml2_paths=$(ldconfig -p | grep libxml2 | sed -E 's/(.*) => (.*)/\2/g')
+          if [ -z "$(echo "$libxml2_paths" | grep '.so.2')" ] && [ -n "$(echo "$libxml2_paths" | grep '.so.16')" ]; then
+            libxml2_16_path="$(echo "$libxml2_paths" | grep '.so.16')"
+            libxml2_2_path="$(echo "$libxml2_16_path" | sed 's/\.so\.16/\.so\.2/')"
+            ln -s "$libxml2_16_path" "$libxml2_2_path"
+          fi
       - name: Set up test package when repository is a template
         if: ${{ github.event.repository.is_template }}
         run: swift package init
