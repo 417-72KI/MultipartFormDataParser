@@ -2,12 +2,22 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
+import Testing
 
-final class StubURLProtocol: URLProtocol {
-    typealias RequestHandler = (URLRequest) throws -> (Data?, HTTPURLResponse)
+protocol StubResponseProvider {
+    static func stub(for request: URLRequest) throws -> (Data?, URLResponse)
+}
 
-    static var requestHandler: RequestHandler?
+extension URLSessionConfiguration {
+    static func stubbed<S: StubResponseProvider>(for type: S.Type) -> URLSessionConfiguration {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [StubURLProtocol<S>.self]
+        return configuration
+    }
+}
 
+// MARK: -
+private final class StubURLProtocol<S: StubResponseProvider>: URLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
         true
     }
@@ -17,20 +27,20 @@ final class StubURLProtocol: URLProtocol {
     }
 
     override func startLoading() {
-        guard let requestHandler = Self.requestHandler else { return }
+        guard let client else { return }
         do {
-            let (data, response) = try requestHandler(request)
-            client?.urlProtocol(
+            let (data, response) = try S.stub(for: request)
+            client.urlProtocol(
                 self,
                 didReceive: response,
                 cacheStoragePolicy: .notAllowed
             )
             if let data {
-                client?.urlProtocol(self, didLoad: data)
+                client.urlProtocol(self, didLoad: data)
             }
-            client?.urlProtocolDidFinishLoading(self)
+            client.urlProtocolDidFinishLoading(self)
         } catch {
-            client?.urlProtocol(self, didFailWithError: error)
+            client.urlProtocol(self, didFailWithError: error)
         }
     }
 

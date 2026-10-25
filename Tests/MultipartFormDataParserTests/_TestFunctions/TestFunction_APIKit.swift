@@ -1,83 +1,53 @@
 import Foundation
-import XCTest
+import Testing
 
 #if canImport(APIKit)
 import APIKit
 
-private let session: Session = {
-    let configuration = URLSessionConfiguration.default
-    configuration.protocolClasses = [StubURLProtocol.self]
+func session(configuration: URLSessionConfiguration) -> Session {
     let adapter = URLSessionAdapter(configuration: configuration)
     return Session(adapter: adapter)
-}()
+}
 
-extension XCTestCase {
-    func requestWithAPIKit(
-        genbaNeko: Data,
-        denwaNeko: Data,
-        pdf: Data,
-        message: Data,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) throws -> URLRequest {
-        try TestRequest(
-            genbaNeko: genbaNeko,
-            denwaNeko: denwaNeko,
-            pdf: pdf,
-            message: message,
-            file: file,
-            line: line
-        ).buildURLRequest()
-    }
+func requestWithAPIKit(
+    genbaNeko: Data,
+    denwaNeko: Data,
+    pdf: Data,
+    message: Data,
+    sourceLocation: SourceLocation = #_sourceLocation
+) throws -> TestRequest {
+    TestRequest(
+        genbaNeko: genbaNeko,
+        denwaNeko: denwaNeko,
+        pdf: pdf,
+        message: message,
+        sourceLocation: sourceLocation
+    )
+}
 
-    func uploadWithAPIKit(
-        genbaNeko: Data,
-        denwaNeko: Data,
-        pdf: Data,
-        message: Data,
-        retryCount: UInt = 3,
-        file: StaticString = #filePath,
-        line: UInt = #line
-    ) throws -> TestEntity {
-        let exp = expectation(description: "response")
-        let request = TestRequest(
-            genbaNeko: genbaNeko,
-            denwaNeko: denwaNeko,
-            pdf: pdf,
-            message: message,
-            file: file,
-            line: line
-        )
-        var result: Result<TestRequest.Response, SessionTaskError>!
-        session.send(request, callbackQueue: nil) {
-            result = $0
-            exp.fulfill()
+func uploadWithAPIKit<R: Request>(
+    _ session: Session,
+    request: R,
+    retryCount: UInt = 3,
+    sourceLocation: SourceLocation = #_sourceLocation
+) async throws -> R.Response {
+    do {
+        return try await session.response(for: request)
+    } catch {
+        if retryCount > 0 {
+            print("retry: \(retryCount)")
+            return try await uploadWithAPIKit(
+                session,
+                request: request,
+                retryCount: retryCount - 1,
+                sourceLocation: sourceLocation
+            )
         }
-
-        wait(for: [exp], timeout: 10)
-
-        switch result! {
-        case let .success(response):
-            return response
-        case let .failure(error):
-            if retryCount > 0 {
-                print("retry: \(retryCount)")
-                return try uploadWithAPIKit(
-                    genbaNeko: genbaNeko,
-                    denwaNeko: denwaNeko,
-                    pdf: pdf,
-                    message: message,
-                    retryCount: retryCount - 1,
-                    file: file,
-                    line: line
-                )
-            }
-            throw error
-        }
+        throw error
     }
 }
 
-private struct TestRequest: APIKit.Request {
+struct TestRequest: APIKit.Request {
     typealias Response = TestEntity
 
     var baseURL: URL { URL(string: "https://localhost")! }
@@ -89,8 +59,7 @@ private struct TestRequest: APIKit.Request {
     var pdf: Data
     var message: Data
 
-    var file: StaticString
-    var line: UInt
+    var sourceLocation: SourceLocation
 
     var bodyParameters: (any BodyParameters)? {
         let parts: [MultipartFormDataBodyParameters.Part] = [
@@ -118,7 +87,7 @@ private struct TestRequest: APIKit.Request {
     }
 
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
-        XCTAssertEqual(urlResponse.statusCode, 200, file: file, line: line)
+        #expect(urlResponse.statusCode == 200, sourceLocation: sourceLocation)
         switch object {
         case let data as Data:
             let decoder = JSONDecoder()

@@ -18,7 +18,7 @@ let package = Package(
         .macOS(.v13),
         .macCatalyst(.v16),
         .iOS(.v16),
-        .tvOS(.v16)
+        .tvOS(.v16),
     ],
     products: [
         .library(name: "MultipartFormDataParser", targets: ["MultipartFormDataParser"]),
@@ -35,8 +35,8 @@ let package = Package(
 if isDevelop {
     if isApplePlatform {
         package.dependencies.append(contentsOf: [
-            .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.57.0"),
-            .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.7.0"),
+            .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", exact: "0.65.1"),
+            .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.12.0"),
             .package(url: "https://github.com/ishkawa/APIKit.git", from: "5.4.0"),
         ])
         package.targets

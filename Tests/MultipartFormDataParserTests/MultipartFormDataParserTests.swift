@@ -1,8 +1,9 @@
-import XCTest
+import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
 
+import Testing
 import MultipartFormDataParser
 
 #if canImport(UIKit)
@@ -11,18 +12,19 @@ import UIKit
 import Cocoa
 #endif
 
-final class MultipartFormDataParserTests: XCTestCase {
-    override class func setUp() {
-        stubForUpload()
-    }
+private var isLinux: Bool {
+    #if os(Linux)
+    true
+    #else
+    false
+    #endif
+}
 
-    override class func tearDown() {
-        clearStubs()
-    }
-
-    func testRequest() throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
+struct MultipartFormDataParserTests {
+    @Test
+    func request() throws {
+        let genbaNeko = try #require(genbaNeko)
+        let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
         let request = createRequest(
             genbaNeko: genbaNeko,
@@ -31,14 +33,15 @@ final class MultipartFormDataParserTests: XCTestCase {
             message: message
         )
         let data = try MultipartFormData.parse(from: request)
-        XCTAssertEqual(data.element(forName: "genbaNeko")?.data, genbaNeko)
-        XCTAssertEqual(data.element(forName: "denwaNeko")?.data, denwaNeko)
-        XCTAssertEqual(data.element(forName: "message")?.string, "Hello world!")
+        #expect(data.element(forName: "genbaNeko")?.data == genbaNeko)
+        #expect(data.element(forName: "denwaNeko")?.data == denwaNeko)
+        #expect(data.element(forName: "message")?.string == "Hello world!")
     }
 
-    func testSequence() throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
+    @Test
+    func sequence() throws {
+        let genbaNeko = try #require(genbaNeko)
+        let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
         let request = createRequest(
             genbaNeko: genbaNeko,
@@ -47,155 +50,143 @@ final class MultipartFormDataParserTests: XCTestCase {
             message: message
         )
         let data = try MultipartFormData.parse(from: request)
-        XCTAssertEqual(["genbaNeko", "denwaNeko", "pdf", "message"], data.map(\.name))
-        XCTAssertEqual([genbaNeko, denwaNeko, pdf, Data("Hello world!".utf8)], data.map(\.data))
+        #expect(["genbaNeko", "denwaNeko", "pdf", "message"] == data.map(\.name))
+        #expect([genbaNeko, denwaNeko, pdf, Data("Hello world!".utf8)] == data.map(\.data))
     }
 
     // MARK: Failure
-    func testEmptyBody() throws {
+    @Test
+    func emptyBody() throws {
         var request = URLRequest(url: URL(string: "https://localhost/empty")!)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=foobar", forHTTPHeaderField: "Content-Type")
         request.httpBody = Data("".utf8)
-        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
-            XCTAssertEqual($0.localizedDescription, "HTTP body stream is empty.")
+        let error = try #require(throws: (any Error).self) {
+            try MultipartFormData.parse(from: request)
         }
+        #expect(error.localizedDescription == "HTTP body stream is empty.")
     }
 
-    func testNoContentType() throws {
+    @Test
+    func noContentType() throws {
         let request = URLRequest(url: URL(string: "https://localhost/empty")!)
-        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
-            XCTAssertEqual($0.localizedDescription, "No Content-Type")
+        let error = try #require(throws: (any Error).self) {
+            try MultipartFormData.parse(from: request)
         }
+        #expect(error.localizedDescription == "No Content-Type")
     }
 
-    func testInvalidContentType() throws {
+    @Test
+    func invalidContentType() throws {
         var request = URLRequest(url: URL(string: "https://localhost/empty")!)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = Data("".utf8)
-        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
-            XCTAssertEqual($0.localizedDescription, "Invalid Content-Type: application/json")
+        let error = try #require(throws: (any Error).self) {
+            try MultipartFormData.parse(from: request)
         }
+        #expect(error.localizedDescription == "Invalid Content-Type: application/json")
     }
 
-    func testInvalidBody() throws {
+    @Test(arguments: [
+        Data("--foobar".utf8),     // body not contains `CRLF`
+        Data("foobar\r\n".utf8),   // body not started with boundary
+        Data("--foobar\r\n".utf8), // body not end with `--{boundary}--`
+    ])
+    func invalidBody(_ body: Data) throws {
         var request = URLRequest(url: URL(string: "https://localhost/empty")!)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=foobar", forHTTPHeaderField: "Content-Type")
-
-        // body not contains `CRLF`
-        request.httpBody = Data("--foobar".utf8)
-        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
-            XCTAssertEqual($0.localizedDescription, "Invalid stream.")
+        request.httpBody = body
+        let error = try #require(throws: (any Error).self) {
+            try MultipartFormData.parse(from: request)
         }
-
-        // body not started with boundary
-        request.httpBody = Data("foobar\r\n".utf8)
-        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
-            XCTAssertEqual($0.localizedDescription, "Invalid stream.")
-        }
-
-        // body not end with `--{boundary}--`
-        request.httpBody = Data("--foobar\r\n".utf8)
-        XCTAssertThrowsError(try MultipartFormData.parse(from: request)) {
-            XCTAssertEqual($0.localizedDescription, "Invalid stream.")
-        }
+        #expect(error.localizedDescription == "Invalid stream.")
     }
+}
 
-    // MARK: using 3rd-party libraries
-    #if canImport(Alamofire)
-    func testAlamofire() throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
+// MARK: using 3rd-party libraries
+#if canImport(Alamofire)
+extension MultipartFormDataParserTests {
+    @Test
+    func alamofire() async throws {
+        let genbaNeko = try #require(genbaNeko)
+        let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
-
-        let result = try XCTUnwrap(
-            uploadWithAlamoFire(
-                genbaNeko: genbaNeko,
-                denwaNeko: denwaNeko,
-                message: message
-            )
+        let result = try await uploadWithAlamoFire(
+            session(configuration: .stubbed(for: UploadTestStubResponse.self)),
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            message: message
         )
-        XCTAssertEqual(result.status, 200)
-        XCTAssertNil(result.error)
+        #expect(result.status == 200)
+        #expect(result.error == nil)
     }
+}
+#endif
 
-    func testAlamofireWithConcurrency() async throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
-        let message = Data("Hello world!".utf8)
-        let result = try await uploadWithAlamoFireConcurrency(genbaNeko: genbaNeko, denwaNeko: denwaNeko, message: message)
-        XCTAssertEqual(result.status, 200)
-        XCTAssertNil(result.error)
-    }
-    #endif
-
-    #if canImport(APIKit)
-    func testAPIKit() throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
+#if canImport(APIKit)
+extension MultipartFormDataParserTests {
+    @Test
+    func apiKit() async throws {
+        let genbaNeko = try #require(genbaNeko)
+        let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
 
-        try runActivity(named: "request") {
-            let request = try requestWithAPIKit(
-                genbaNeko: genbaNeko,
-                denwaNeko: denwaNeko,
-                pdf: pdf,
-                message: message
-            )
-            let data = try MultipartFormData.parse(from: request)
-            XCTAssertEqual(data.element(forName: "genbaNeko")?.data, genbaNeko)
-            XCTAssertEqual(data.element(forName: "denwaNeko")?.data, denwaNeko)
-            XCTAssertEqual(data.element(forName: "message")?.string, "Hello world!")
-        }
+        let request = try requestWithAPIKit(
+            genbaNeko: genbaNeko,
+            denwaNeko: denwaNeko,
+            pdf: pdf,
+            message: message
+        )
+        let data = try MultipartFormData.parse(from: request.buildURLRequest())
+        #expect(data.element(forName: "genbaNeko")?.data == genbaNeko)
+        #expect(data.element(forName: "denwaNeko")?.data == denwaNeko)
+        #expect(data.element(forName: "message")?.string == "Hello world!")
 
-        try runActivity(named: "stub") {
-            let result = try XCTUnwrap(
-                uploadWithAPIKit(
-                    genbaNeko: genbaNeko,
-                    denwaNeko: denwaNeko,
-                    pdf: pdf,
-                    message: message
-                )
-            )
-            XCTAssertEqual(result.status, 200)
-            XCTAssertNil(result.error)
-        }
+        let result = try await uploadWithAPIKit(
+            session(configuration: .stubbed(for: UploadTestStubResponse.self)),
+            request: request,
+        )
+        #expect(result.status == 200)
+        #expect(result.error == nil)
     }
-    #endif
+}
+#endif
 
-    // MARK: URLSession
-    func testURLSessionUploadTask() async throws {
-        #if os(Linux)
-        // FIXME: There is no way to get body stream with `URLSessionUploadTask`.
-        try XCTSkipIf(true, "Stubbing `URLSessionUploadTask` in Linux is not supported.")
-        #endif
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
+// MARK: URLSession
+extension MultipartFormDataParserTests {
+    // FIXME: There is no way to get body stream with `URLSessionUploadTask`.
+    @Test(.disabled(if: isLinux, "Stubbing `URLSessionUploadTask` in Linux is not supported."))
+    func urlSessionUploadTask() async throws {
+        let genbaNeko = try #require(genbaNeko)
+        let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
         let result = try await uploadURLSessionUpload(
+            URLSession(configuration: .stubbed(for: UploadTestStubResponse.self)),
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
             pdf: pdf,
             message: message
         )
-        XCTAssertEqual(result.status, 200)
-        XCTAssertNil(result.error)
+        #expect(result.status == 200)
+        #expect(result.error == nil)
     }
 
-    func testURLSessionDataTask() async throws {
-        let genbaNeko = try XCTUnwrap(genbaNeko)
-        let denwaNeko = try XCTUnwrap(denwaNeko)
+    @Test
+    func urlSessionDataTask() async throws {
+        let genbaNeko = try #require(genbaNeko)
+        let denwaNeko = try #require(denwaNeko)
         let message = Data("Hello world!".utf8)
         let result = try await uploadURLSessionData(
+            URLSession(configuration: .stubbed(for: UploadTestStubResponse.self)),
             genbaNeko: genbaNeko,
             denwaNeko: denwaNeko,
             pdf: pdf,
             message: message
         )
-        XCTAssertEqual(result.status, 200)
-        XCTAssertNil(result.error)
+        #expect(result.status == 200)
+        #expect(result.error == nil)
     }
 }
 
