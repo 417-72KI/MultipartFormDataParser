@@ -1,7 +1,6 @@
 # MultipartFormDataParser
 [![Actions Status](https://github.com/417-72KI/MultipartFormDataParser/workflows/Test/badge.svg)](https://github.com/417-72KI/MultipartFormDataParser/actions)
 [![GitHub release](https://img.shields.io/github/release/417-72KI/MultipartFormDataParser/all.svg)](https://github.com/417-72KI/MultipartFormDataParser/releases)
-[![Swift Package Manager](https://img.shields.io/badge/Swift%20Package%20Manager-5.10-brightgreen.svg)](https://github.com/apple/swift-package-manager)
 [![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2F417-72KI%2FMultipartFormDataParser%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/417-72KI/MultipartFormDataParser)
 [![Supporting Platforms](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2F417-72KI%2FMultipartFormDataParser%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/417-72KI/MultipartFormDataParser)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/417-72KI/MultipartFormDataParser/master/LICENSE)
