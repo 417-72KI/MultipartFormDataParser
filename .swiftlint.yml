@@ -46,14 +46,14 @@ disabled_rules:
   - unused_parameter
   - variable_shadowing
   - vertical_whitespace_between_cases
+file_length:
+  ignore_comment_only_lines: true
 line_length:
   warning: 180
   ignores_urls: true
   ignores_function_declarations: true
   ignores_comments: true
   ignores_interpolated_strings: true
-file_length:
-  ignore_comment_only_lines: true
 attributes:
   always_on_same_line:
     - '@IBAction'
@@ -65,6 +65,8 @@ identifier_name:
   excluded:
     - ^i$
     - ^id$
+large_tuple:
+  ignore_regex: true
 multiline_arguments:
   only_enforce_after_first_closure_on_first_line: true
 nesting:

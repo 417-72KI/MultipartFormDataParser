@@ -62,7 +62,6 @@ extension MultipartFormData.Element {
 }
 
 private extension MultipartFormData.Element {
-    // swiftlint:disable:next large_tuple
     static func matchContentDisposition(in string: String) -> Regex<(Substring, name: Substring, Substring?, filename: Substring?)>.Match? {
         try! #/Content-Disposition: form-data; name="(?<name>.*?)"(; filename="(?<filename>.*?)")?/#
             .firstMatch(in: string)
