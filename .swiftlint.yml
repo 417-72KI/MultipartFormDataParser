@@ -8,6 +8,7 @@ disabled_rules:
   - anonymous_argument_in_multiline_closure
   - conditional_returns_on_newline
   - contrasted_opening_brace
+  - discouraged_default_parameter
   - discouraged_optional_collection
   - explicit_acl
   - explicit_enum_raw_value
@@ -28,18 +29,22 @@ disabled_rules:
   - no_magic_numbers
   - non_overridable_class_declaration
   - object_literal
+  - one_declaration_per_file
   - prefer_nimble
   - prefixed_toplevel_constant
   - prohibited_interface_builder
   - required_deinit
   - sorted_enum_cases
+  - sorted_imports
   - static_over_final_class
   - strict_fileprivate
   - strong_iboutlet
   - switch_case_on_newline
+  - unneeded_throws_rethrows
   - unowned_variable_capture
   - unused_optional_binding
   - unused_parameter
+  - variable_shadowing
   - vertical_whitespace_between_cases
 line_length:
   warning: 180
