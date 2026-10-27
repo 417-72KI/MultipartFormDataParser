@@ -25,6 +25,7 @@ func requestWithAPIKit(
     )
 }
 
+@concurrent
 func uploadWithAPIKit<R: Request>(
     _ session: Session,
     request: R,
